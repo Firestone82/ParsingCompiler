@@ -40,11 +40,11 @@ public class LanguageTypeVisitor extends LanguageBaseVisitor<Type> implements La
     }
 
     @Override
-    public Type visitBinaryExpression(LanguageParser.BinaryExpressionContext ctx) {
+    public Type visitRelationExpression(LanguageParser.RelationExpressionContext ctx) {
         Type leftType = visit(ctx.expression(0));
         Type rightType = visit(ctx.expression(1));
 
-        if (Type.resultType(leftType, rightType, ctx.operator().getText()) == Type.ERROR) {
+        if (Type.resultType(leftType, rightType, ctx.op.getText()) == Type.ERROR) {
             ErrorLogger.addError(ctx, "Incompatible types %s and %s", leftType, rightType);
         }
 

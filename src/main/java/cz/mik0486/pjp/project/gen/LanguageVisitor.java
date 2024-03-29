@@ -73,27 +73,6 @@ public interface LanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitWhileStatement(LanguageParser.WhileStatementContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code binaryCondition}
-	 * labeled alternative in {@link LanguageParser#condition}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBinaryCondition(LanguageParser.BinaryConditionContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code unaryCondition}
-	 * labeled alternative in {@link LanguageParser#condition}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitUnaryCondition(LanguageParser.UnaryConditionContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code varCondition}
-	 * labeled alternative in {@link LanguageParser#condition}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVarCondition(LanguageParser.VarConditionContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code boolCondition}
 	 * labeled alternative in {@link LanguageParser#condition}.
 	 * @param ctx the parse tree
@@ -101,12 +80,12 @@ public interface LanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBoolCondition(LanguageParser.BoolConditionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code binaryExpression}
+	 * Visit a parse tree produced by the {@code moduloExpression}
 	 * labeled alternative in {@link LanguageParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitBinaryExpression(LanguageParser.BinaryExpressionContext ctx);
+	T visitModuloExpression(LanguageParser.ModuloExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code varExpression}
 	 * labeled alternative in {@link LanguageParser#expression}.
@@ -121,6 +100,34 @@ public interface LanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAssignExpression(LanguageParser.AssignExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code aritmExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAritmExpression(LanguageParser.AritmExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code logicExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLogicExpression(LanguageParser.LogicExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code relationExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRelationExpression(LanguageParser.RelationExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code comparisonExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitComparisonExpression(LanguageParser.ComparisonExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code parenExpression}
 	 * labeled alternative in {@link LanguageParser#expression}.
@@ -143,17 +150,12 @@ public interface LanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLiteralExpression(LanguageParser.LiteralExpressionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LanguageParser#operator}.
+	 * Visit a parse tree produced by the {@code concatExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitOperator(LanguageParser.OperatorContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LanguageParser#unary}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitUnary(LanguageParser.UnaryContext ctx);
+	T visitConcatExpression(LanguageParser.ConcatExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link LanguageParser#literal}.
 	 * @param ctx the parse tree
