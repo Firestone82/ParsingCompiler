@@ -17,23 +17,131 @@ public interface LanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProgram(LanguageParser.ProgramContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LanguageParser#statement}.
+	 * Visit a parse tree produced by the {@code emptyStatement}
+	 * labeled alternative in {@link LanguageParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStatement(LanguageParser.StatementContext ctx);
+	T visitEmptyStatement(LanguageParser.EmptyStatementContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LanguageParser#condition}.
+	 * Visit a parse tree produced by the {@code varDeclStatement}
+	 * labeled alternative in {@link LanguageParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitCondition(LanguageParser.ConditionContext ctx);
+	T visitVarDeclStatement(LanguageParser.VarDeclStatementContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LanguageParser#expression}.
+	 * Visit a parse tree produced by the {@code exprStatement}
+	 * labeled alternative in {@link LanguageParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExpression(LanguageParser.ExpressionContext ctx);
+	T visitExprStatement(LanguageParser.ExprStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code readStatement}
+	 * labeled alternative in {@link LanguageParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReadStatement(LanguageParser.ReadStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code writeStatement}
+	 * labeled alternative in {@link LanguageParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWriteStatement(LanguageParser.WriteStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code blockStatement}
+	 * labeled alternative in {@link LanguageParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlockStatement(LanguageParser.BlockStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ifStatement}
+	 * labeled alternative in {@link LanguageParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIfStatement(LanguageParser.IfStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code whileStatement}
+	 * labeled alternative in {@link LanguageParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWhileStatement(LanguageParser.WhileStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code binaryCondition}
+	 * labeled alternative in {@link LanguageParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBinaryCondition(LanguageParser.BinaryConditionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code unaryCondition}
+	 * labeled alternative in {@link LanguageParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnaryCondition(LanguageParser.UnaryConditionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code varCondition}
+	 * labeled alternative in {@link LanguageParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVarCondition(LanguageParser.VarConditionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code boolCondition}
+	 * labeled alternative in {@link LanguageParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolCondition(LanguageParser.BoolConditionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code binaryExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBinaryExpression(LanguageParser.BinaryExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code varExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVarExpression(LanguageParser.VarExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code assignExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssignExpression(LanguageParser.AssignExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code parenExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParenExpression(LanguageParser.ParenExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code unaryExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnaryExpression(LanguageParser.UnaryExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code literalExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLiteralExpression(LanguageParser.LiteralExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link LanguageParser#operator}.
 	 * @param ctx the parse tree

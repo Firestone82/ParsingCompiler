@@ -6,8 +6,9 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 @Slf4j
 public class Main {
+
     public static void main(String[] args) {
-        Program programTest1 = new Program("Test 1", "Project/PLC_T3.in.txt");
+        Program programTest1 = new Program("Test 1", "Project/PLC_test.in.txt");
         if (!programTest1.init()) {
             log.error("Error while initializing program");
             return;

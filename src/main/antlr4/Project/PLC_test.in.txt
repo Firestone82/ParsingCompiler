@@ -1,0 +1,12 @@
+write "<Constants>";
+string s;
+s="Abcd";
+write "s(Abcd): ", s;
+
+string a;
+a = 1;
+
+while(a) {
+ write "a=",a;
+ a=a+1;
+}

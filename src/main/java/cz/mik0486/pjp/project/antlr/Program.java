@@ -1,5 +1,7 @@
 package cz.mik0486.pjp.project.antlr;
 
+import cz.mik0486.pjp.project.antlr.error.ErrorListener;
+import cz.mik0486.pjp.project.antlr.error.ErrorLogger;
 import cz.mik0486.pjp.project.gen.LanguageLexer;
 import cz.mik0486.pjp.project.gen.LanguageParser;
 import lombok.Data;
@@ -58,10 +60,21 @@ public class Program {
         parser.removeErrorListeners();
         parser.addErrorListener(new ErrorListener());
 
-        context = parser.program();
-
+        // Check for syntax errors
         if (parser.getNumberOfSyntaxErrors() > 0) {
             log.error(" - Syntax errors found!");
+            return false;
+        }
+
+        context = parser.program();
+
+        // Run type checking
+        LanguageTypeVisitor visitor = new LanguageTypeVisitor();
+        visitor.visit(context);
+
+        if (ErrorLogger.hasErrors()) {
+            log.error(" - Type errors found!");
+            ErrorLogger.printErrors();
             return false;
         }
 

@@ -1,34 +1,34 @@
 grammar Language;
 program: (statement)+;
 
-statement
-    : ';'                                                   // Empty command
-    | TYPE VAR (',' VAR)* ';'                               // Variable declaration
-    | expression ';'                                        // AAAA, expressions
-    | 'read' VAR (',' VAR)* ';'                             // Read variable
-    | 'write' expression (',' expression)* ';'              // Write expression
-    | '{' statement (statement)* '}'                    // Block statement
-    | 'if' '(' condition ')' statement ('else' statement)?  // ifStatement
-    | 'while' '(' condition ')' statement                   // whileStatement
+statement                                                                      // Type Check
+    : ';'                                                   # emptyStatement   //
+    | TYPE VAR (',' VAR)* ';'                               # varDeclStatement // ✅
+    | expression ';'                                        # exprStatement    //
+    | 'read' VAR (',' VAR)* ';'                             # readStatement    //
+    | 'write' expression (',' expression)* ';'              # writeStatement   //
+    | '{' statement* '}'                                    # blockStatement   //
+    | 'if' '(' condition ')' statement ('else' statement)?  # ifStatement      //
+    | 'while' '(' condition ')' statement                   # whileStatement   //
     ;
 
 condition
-	: expression operator expression
-	| unary expression
-	| VAR
-	| BOOL
+	: expression operator expression # binaryCondition  //
+	| unary expression               # unaryCondition   //
+	| VAR 							 # varCondition     //
+	| BOOL 							 # boolCondition	//
 	;
 
 expression
-    : '(' expression ')'
-    | expression operator expression
-    | unary expression
-    | VAR
-    | literal
-    | VAR '=' expression
+    : '(' expression ')'    			# parenExpression   //
+    | expression operator expression    # binaryExpression  //
+    | unary expression                  # unaryExpression   //
+    | VAR                               # varExpression     //
+    | literal                           # literalExpression //
+    | VAR '=' expression                # assignExpression  // ✅
     ;
 
-operator: '+' | '-' | '*' | '/' | '%' | '.' | '<' | '>' | '==' | '!=' | '&&' | '||' | '-' | '!';
+operator: '+' | '-' | '*' | '/' | '%' | '.' | '<' | '>' | '==' | '!=' | '&&' | '||';
 unary: '-' | '!';
 
 literal
