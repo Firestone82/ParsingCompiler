@@ -6,6 +6,7 @@ on:
 
 jobs:
   build:
+    permissions: write-all
     runs-on: ubuntu-latest
 
     steps:
@@ -22,11 +23,6 @@ jobs:
 
     - name: Run tests
       run: mvn test --file pom.xml
-
-    - name: Test
-      run: |
-        ls -al
-        ls -al target
 
     - name: Publish Test Report
       if: success() || failure()
