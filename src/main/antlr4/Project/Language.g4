@@ -51,9 +51,6 @@ STRING: '"' (ESC | ~["\\])* '"';
 TYPE: 'int' | 'float' | 'bool' | 'string';
 VAR: LETTER (LETTER | DIGIT)*;
 
-// Fucki waki solved by https://stackoverflow.com/questions/22415208/get-rid-of-token-recognition-error
-ErrorCharacter : . ;
-
 COMMENT: '//' ~[\r\n]* -> skip;
 SPACE: [ \t\r\n]+ -> skip;
 

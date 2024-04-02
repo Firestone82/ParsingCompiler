@@ -2,8 +2,8 @@ package cz.mik0486.pjp.project.antlr;
 
 import cz.mik0486.pjp.project.antlr.error.ErrorListener;
 import cz.mik0486.pjp.project.antlr.error.ErrorLogger;
-import cz.mik0486.pjp.project.gen.LanguageLexer;
-import cz.mik0486.pjp.project.gen.LanguageParser;
+import cz.mik0486.pjp.project.antlr.gen.LanguageLexer;
+import cz.mik0486.pjp.project.antlr.gen.LanguageParser;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.CharStream;

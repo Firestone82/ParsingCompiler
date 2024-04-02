@@ -1,9 +1,9 @@
 package cz.mik0486.pjp.project.antlr;
 
 import cz.mik0486.pjp.project.antlr.error.ErrorLogger;
-import cz.mik0486.pjp.project.gen.LanguageBaseVisitor;
-import cz.mik0486.pjp.project.gen.LanguageParser;
-import cz.mik0486.pjp.project.gen.LanguageVisitor;
+import cz.mik0486.pjp.project.antlr.gen.LanguageBaseVisitor;
+import cz.mik0486.pjp.project.antlr.gen.LanguageParser;
+import cz.mik0486.pjp.project.antlr.gen.LanguageVisitor;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
