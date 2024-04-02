@@ -6,6 +6,7 @@ on:
 
 jobs:
   build:
+    permissions: write-all
     runs-on: ubuntu-latest
 
     steps:
@@ -26,6 +27,8 @@ jobs:
     - name: Publish Test Report
       if: success() || failure()
       uses: scacap/action-surefire-report@v1
+      with:
+          path: target/surefire-reports
 
     - name: Upload JAR
       uses: actions/upload-artifact@v2
