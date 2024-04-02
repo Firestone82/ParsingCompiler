@@ -41,4 +41,22 @@ public class TestPrograms {
 
         assertNotNull(program.getExpressions());
     }
+
+    @Test
+    public void testFor() {
+        String text = """
+                int i; // Test
+                for (i = "A"; i < 10; i = 1 + i) {
+                    write "Hello, World!";
+                }
+                """;
+
+        Program program = new Program("Test for", text);
+        if (!program.init()) {
+            log.error("Error while initializing program");
+            throw new AssertionError("Error while initializing program");
+        }
+
+        assertNotNull(program.getExpressions());
+    }
 }

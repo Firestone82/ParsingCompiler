@@ -17,11 +17,11 @@ import java.util.List;
 
 @Data
 @Slf4j
-@RequiredArgsConstructor
 public class Program {
 
     private final String programName;
     private final String inputFilePath;
+    private String inputText;
 
     private LanguageLexer lexer;
     private CommonTokenStream tokens;
@@ -29,29 +29,43 @@ public class Program {
 
     private LanguageParser.ProgramContext context;
 
+    public Program(String programName, String inputText) {
+        this.programName = programName;
+        this.inputText = inputText;
+        this.inputFilePath = null;
+    }
+
     public boolean init() {
         long startTime = System.currentTimeMillis();
 
         log.info("Initializing program %s".formatted(programName));
         log.debug(" - Loading input file src/main/antlr4/%s".formatted(inputFilePath));
 
-        File inputFile = new File("src/main/antlr4", inputFilePath);
-        if (!inputFile.exists()) {
-            log.error("    - Input file not found");
-            return false;
-        }
-
         CharStream input = null;
-        try {
-            input = CharStreams.fromFileName(inputFile.getAbsolutePath());
 
-            if (input.size() == 0) {
-                log.error("    - Input file is empty");
-                System.exit(1);
+        if (inputFilePath != null) {
+            log.debug(" - Loading input file src/main/antlr4/%s".formatted(inputFilePath));
+
+            File inputFile = new File("src/main/antlr4", inputFilePath);
+            if (!inputFile.exists()) {
+                log.error("    - Input file not found");
+                return false;
             }
-        } catch (Exception e) {
-            log.error("    - Error while loading input file: %s".formatted(e.getMessage()));
-            return false;
+
+            try {
+                input = CharStreams.fromFileName(inputFile.getAbsolutePath());
+
+                if (input.size() == 0) {
+                    log.error("    - Input file is empty");
+                    System.exit(1);
+                }
+            } catch (Exception e) {
+                log.error("    - Error while loading input file: %s".formatted(e.getMessage()));
+                return false;
+            }
+        } else {
+            log.debug(" - Using input text");
+            input = CharStreams.fromString(inputText);
         }
 
         lexer = new LanguageLexer(input);
@@ -60,13 +74,13 @@ public class Program {
         parser.removeErrorListeners();
         parser.addErrorListener(new ErrorListener());
 
+        context = parser.program();
+
         // Check for syntax errors
         if (parser.getNumberOfSyntaxErrors() > 0) {
             log.error(" - Syntax errors found!");
             return false;
         }
-
-        context = parser.program();
 
         // Run type checking
         LanguageTypeVisitor visitor = new LanguageTypeVisitor();

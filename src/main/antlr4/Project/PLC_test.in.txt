@@ -1,10 +1,9 @@
-write "<Constants>";
+warite "<Constants>";
 string s;
 s="Abcd";
 write "s(Abcd): ", s;
 
-string a;
-a = 1;
+int a;
 
 while(a) {
  write "a=",a;

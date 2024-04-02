@@ -1,15 +1,16 @@
 grammar Language;
 program: (statement)+;
 
-statement                                                                        // Type Check
-    : ';'                                                   # emptyStatement     //
-    | TYPE VAR (',' VAR)* ';'                               # varDeclStatement   // ✅
-    | expression ';'                                        # exprStatement      //
-    | 'read' VAR (',' VAR)* ';'                             # readStatement      //
-    | 'write' expression (',' expression)* ';'              # writeStatement     //
-    | '{' statement* '}'                                    # blockStatement     //
-    | 'if' '(' condition ')' statement ('else' statement)?  # ifStatement        //
-    | 'while' '(' condition ')' statement                   # whileStatement     //
+statement                                                                                  // Type Check
+    : ';'                                                             # emptyStatement     //
+    | TYPE VAR (',' VAR)* ';'                                         # varDeclStatement   // ✅
+    | expression ';'                                                  # exprStatement      //
+    | 'read' VAR (',' VAR)* ';'                                       # readStatement      //
+    | 'write' expression (',' expression)* ';'                        # writeStatement     //
+    | '{' statement* '}'                                              # blockStatement     //
+    | 'if' '(' condition ')' statement ('else' statement)?            # ifStatement        //
+    | 'while' '(' condition ')' statement                             # whileStatement     //
+    | 'for' '(' expression ';' condition ';' expression ')' statement # forStatement       //
     ;
 
 // TODO: Maybe remove??

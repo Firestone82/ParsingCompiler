@@ -73,6 +73,13 @@ public interface LanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitWhileStatement(LanguageParser.WhileStatementContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code forStatement}
+	 * labeled alternative in {@link LanguageParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitForStatement(LanguageParser.ForStatementContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code boolCondition}
 	 * labeled alternative in {@link LanguageParser#condition}.
 	 * @param ctx the parse tree
@@ -115,6 +122,13 @@ public interface LanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLogicExpression(LanguageParser.LogicExpressionContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code notExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNotExpression(LanguageParser.NotExpressionContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code relationExpression}
 	 * labeled alternative in {@link LanguageParser#expression}.
 	 * @param ctx the parse tree
@@ -136,12 +150,12 @@ public interface LanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParenExpression(LanguageParser.ParenExpressionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code unaryExpression}
+	 * Visit a parse tree produced by the {@code negExpression}
 	 * labeled alternative in {@link LanguageParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitUnaryExpression(LanguageParser.UnaryExpressionContext ctx);
+	T visitNegExpression(LanguageParser.NegExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code literalExpression}
 	 * labeled alternative in {@link LanguageParser#expression}.

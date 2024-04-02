@@ -114,6 +114,18 @@ public interface LanguageListener extends ParseTreeListener {
 	 */
 	void exitWhileStatement(LanguageParser.WhileStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code forStatement}
+	 * labeled alternative in {@link LanguageParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterForStatement(LanguageParser.ForStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code forStatement}
+	 * labeled alternative in {@link LanguageParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitForStatement(LanguageParser.ForStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code boolCondition}
 	 * labeled alternative in {@link LanguageParser#condition}.
 	 * @param ctx the parse tree
@@ -186,6 +198,18 @@ public interface LanguageListener extends ParseTreeListener {
 	 */
 	void exitLogicExpression(LanguageParser.LogicExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code notExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterNotExpression(LanguageParser.NotExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code notExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitNotExpression(LanguageParser.NotExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code relationExpression}
 	 * labeled alternative in {@link LanguageParser#expression}.
 	 * @param ctx the parse tree
@@ -222,17 +246,17 @@ public interface LanguageListener extends ParseTreeListener {
 	 */
 	void exitParenExpression(LanguageParser.ParenExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code unaryExpression}
+	 * Enter a parse tree produced by the {@code negExpression}
 	 * labeled alternative in {@link LanguageParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterUnaryExpression(LanguageParser.UnaryExpressionContext ctx);
+	void enterNegExpression(LanguageParser.NegExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code unaryExpression}
+	 * Exit a parse tree produced by the {@code negExpression}
 	 * labeled alternative in {@link LanguageParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitUnaryExpression(LanguageParser.UnaryExpressionContext ctx);
+	void exitNegExpression(LanguageParser.NegExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code literalExpression}
 	 * labeled alternative in {@link LanguageParser#expression}.

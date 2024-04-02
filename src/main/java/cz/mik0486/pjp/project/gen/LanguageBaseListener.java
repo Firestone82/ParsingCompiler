@@ -125,6 +125,18 @@ public class LanguageBaseListener implements LanguageListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterForStatement(LanguageParser.ForStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitForStatement(LanguageParser.ForStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBoolCondition(LanguageParser.BoolConditionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -197,6 +209,18 @@ public class LanguageBaseListener implements LanguageListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNotExpression(LanguageParser.NotExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNotExpression(LanguageParser.NotExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterRelationExpression(LanguageParser.RelationExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -233,13 +257,13 @@ public class LanguageBaseListener implements LanguageListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnaryExpression(LanguageParser.UnaryExpressionContext ctx) { }
+	@Override public void enterNegExpression(LanguageParser.NegExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUnaryExpression(LanguageParser.UnaryExpressionContext ctx) { }
+	@Override public void exitNegExpression(LanguageParser.NegExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
