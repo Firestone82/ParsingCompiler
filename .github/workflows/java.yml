@@ -23,6 +23,10 @@ jobs:
     - name: Run tests
       run: mvn test --file pom.xml
 
+    - name: Publish Test Report
+      if: success() || failure()
+      uses: scacap/action-surefire-report@v1
+
     - name: Upload JAR
       uses: actions/upload-artifact@v2
       with:
