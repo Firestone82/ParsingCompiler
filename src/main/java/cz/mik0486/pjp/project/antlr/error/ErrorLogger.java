@@ -3,6 +3,7 @@ package cz.mik0486.pjp.project.antlr.error;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,9 +23,15 @@ public class ErrorLogger {
         return INSTANCE;
     }
 
-    public static void addError(ParserRuleContext ctx, String error, Object... args) {
+    public static void addError(ParserRuleContext ctx, Token token, String error, Object... args) {
         int lineNum = ctx.getStart().getLine();
-        int charPos = ctx.getStart().getCharPositionInLine();
+        int charPos = 0;
+
+        if (token != null) {
+            charPos = token.getCharPositionInLine();
+        } else {
+            charPos = ctx.getStart().getCharPositionInLine();
+        }
 
         String message = error.formatted(args);
         getInstance().errors.add("""
@@ -40,6 +47,10 @@ public class ErrorLogger {
 
     public static boolean hasErrors() {
         return !getInstance().errors.isEmpty();
+    }
+
+    public static List<String> getErrors() {
+        return getInstance().errors;
     }
 
     public static void printErrors() {

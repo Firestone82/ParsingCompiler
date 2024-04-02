@@ -1,35 +1,38 @@
 grammar Language;
 program: (statement)+;
 
-statement                                                                                  // Type Check
-    : ';'                                                             # emptyStatement     //
-    | TYPE VAR (',' VAR)* ';'                                         # varDeclStatement   // ✅
-    | expression ';'                                                  # exprStatement      //
-    | 'read' VAR (',' VAR)* ';'                                       # readStatement      //
-    | 'write' expression (',' expression)* ';'                        # writeStatement     //
-    | '{' statement* '}'                                              # blockStatement     //
-    | 'if' '(' condition ')' statement ('else' statement)?            # ifStatement        //
-    | 'while' '(' condition ')' statement                             # whileStatement     //
-    | 'for' '(' expression ';' condition ';' expression ')' statement # forStatement       //
+// ✅ - Done
+// 🆗 - Skipped, should be fine
+
+statement                                                                                  // Type Check | Tests
+    : ';'                                                             # emptyStatement     // 🆗           ✅
+    | TYPE VAR (',' VAR)* ';'                                         # varDeclStatement   // ✅           ✅
+    | expression ';'                                                  # exprStatement      // 🆗           ✅
+    | 'read' VAR (',' VAR)* ';'                                       # readStatement      // ✅           ✅
+    | 'write' expression (',' expression)* ';'                        # writeStatement     // 🆗️           ✅
+    | '{' statement* '}'                                              # blockStatement     // 🆗           ✅
+    | 'if' '(' condition ')' statement ('else' statement)?            # ifStatement        // 🆗           ✅
+    | 'while' '(' condition ')' statement                             # whileStatement     // 🆗           ✅
+    | 'do' statement 'while' '(' condition ')' ';'                    # doWhileStatement   // 🆗           🆗
+    | 'for' '(' expression ';' condition ';' expression ')' statement # forStatement       // 🆗           🆗
     ;
 
-// TODO: Maybe remove??
-condition
-	: expression # boolCondition    //
+condition                           // Type Check | Tests
+	: expression # boolCondition    // ✅
 	;
 
-expression
-    : '(' expression ')'    			                  # parenExpression      //
-    | expression op=('+' | '-' | '*' | '/') expression    # aritmExpression      //
-    | expression op='%' expression                        # moduloExpression     //
-    | expression op='.' expression                        # concatExpression     //
-    | expression op=('<' | '>') expression                # relationExpression   //
-    | expression op=('==' | '!=') expression              # comparisonExpression //
-    | expression op=('&&' | '||') expression              # logicExpression      //
-    | op='!' expression                                   # notExpression        //
-    | op='-' expression                                   # negExpression        //
-    | VAR                                                 # varExpression        //
-    | literal                                             # literalExpression    //
+expression                                                                       // Type Check | Tests
+    : '(' expression ')'    			                  # parenExpression      // 🆗
+    | expression op=('+' | '-' | '*' | '/') expression    # aritmExpression      // ✅
+    | expression op='%' expression                        # moduloExpression     // ✅
+    | expression op='.' expression                        # concatExpression     // ✅
+    | expression op=('<' | '>') expression                # relationExpression   // ✅
+    | expression op=('==' | '!=') expression              # comparisonExpression // ✅
+    | expression op=('&&' | '||') expression              # logicExpression      // ✅
+    | op='!' expression                                   # notExpression        // ✅
+    | op='-' expression                                   # negExpression        // ✅
+    | VAR                                                 # varExpression        // ✅
+    | literal                                             # literalExpression    // ✅
     | VAR '=' expression                                  # assignExpression     // ✅
     ;
 
@@ -47,6 +50,9 @@ STRING: '"' (ESC | ~["\\])* '"';
 
 TYPE: 'int' | 'float' | 'bool' | 'string';
 VAR: LETTER (LETTER | DIGIT)*;
+
+// Fucki waki solved by https://stackoverflow.com/questions/22415208/get-rid-of-token-recognition-error
+ErrorCharacter : . ;
 
 COMMENT: '//' ~[\r\n]* -> skip;
 SPACE: [ \t\r\n]+ -> skip;

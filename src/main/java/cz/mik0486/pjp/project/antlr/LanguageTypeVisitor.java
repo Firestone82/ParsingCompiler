@@ -5,6 +5,8 @@ import cz.mik0486.pjp.project.gen.LanguageBaseVisitor;
 import cz.mik0486.pjp.project.gen.LanguageParser;
 import cz.mik0486.pjp.project.gen.LanguageVisitor;
 import lombok.extern.slf4j.Slf4j;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,27 +18,79 @@ public class LanguageTypeVisitor extends LanguageBaseVisitor<Type> implements La
     @Override
     public Type visitVarDeclStatement(LanguageParser.VarDeclStatementContext ctx) {
         Type type = Type.valueOf(ctx.TYPE().getText().toUpperCase());
-        ctx.VAR().forEach(var -> symbolTable.put(var.getText(), type));
-        return null;
+        boolean errored = false;
+
+        for (TerminalNode terminal : ctx.VAR()) {
+            if (symbolTable.containsKey(terminal.getText())) {
+                ErrorLogger.addError(ctx, terminal.getSymbol(), "Variable %s already declared", terminal.getText());
+                errored = true;
+            }
+
+            log.info("Declaring variable {} of type {}", terminal.getText(), type);
+            symbolTable.put(terminal.getText(), type);
+        }
+
+        return errored ? Type.ERROR : type;
     }
 
     @Override
-    public Type visitAssignExpression(LanguageParser.AssignExpressionContext ctx) {
-        String varName = ctx.VAR().getText();
-        Type varType = symbolTable.get(varName);
-        Type exprType = visit(ctx.expression());
+    public Type visitReadStatement(LanguageParser.ReadStatementContext ctx) {
+        boolean errored = false;
 
-        if (varType == Type.INT && exprType == Type.FLOAT) {
-            return Type.FLOAT;
-        } else if (varType == Type.FLOAT && exprType == Type.INT) {
-            return Type.INT;
+        for (TerminalNode terminal : ctx.VAR()) {
+            if (!symbolTable.containsKey(terminal.getText())) {
+                ErrorLogger.addError(ctx, terminal.getSymbol(), "Variable %s not declared", terminal.getText());
+                errored = true;
+            }
         }
 
-        if (!varType.equals(exprType)) {
-            ErrorLogger.addError(ctx, "Trying to assign %s to %s", exprType, varType);
+        return errored ? Type.ERROR : Type.VOID;
+    }
+
+    /**
+     * ======================
+     * CONDITION
+     * ======================
+     */
+
+    @Override
+    public Type visitBoolCondition(LanguageParser.BoolConditionContext ctx) {
+        Type conditionType = visit(ctx.expression());
+        if (conditionType != Type.BOOL) {
+            ErrorLogger.addError(ctx, null,"Condition must be of type BOOL, got %s", conditionType);
         }
 
-        return varType;
+        return Type.BOOL;
+    }
+
+    /**
+     * ======================
+     * EXPRESSIONS
+     * ======================
+     */
+
+    @Override
+    public Type visitAritmExpression(LanguageParser.AritmExpressionContext ctx) {
+        Type leftType = visit(ctx.expression(0));
+        Type rightType = visit(ctx.expression(1));
+
+        return checkExpression(leftType, rightType, ctx.op.getText(), ctx, ctx.op);
+    }
+
+    @Override
+    public Type visitModuloExpression(LanguageParser.ModuloExpressionContext ctx) {
+        Type leftType = visit(ctx.expression(0));
+        Type rightType = visit(ctx.expression(1));
+
+        return checkExpression(leftType, rightType, ctx.op.getText(), ctx, ctx.op);
+    }
+
+    @Override
+    public Type visitConcatExpression(LanguageParser.ConcatExpressionContext ctx) {
+        Type leftType = visit(ctx.expression(0));
+        Type rightType = visit(ctx.expression(1));
+
+        return checkExpression(leftType, rightType, ctx.op.getText(), ctx, ctx.op);
     }
 
     @Override
@@ -44,11 +98,69 @@ public class LanguageTypeVisitor extends LanguageBaseVisitor<Type> implements La
         Type leftType = visit(ctx.expression(0));
         Type rightType = visit(ctx.expression(1));
 
-        if (Type.resultType(leftType, rightType, ctx.op.getText()) == Type.ERROR) {
-            ErrorLogger.addError(ctx, "Incompatible types %s and %s", leftType, rightType);
+        return checkExpression(leftType, rightType, ctx.op.getText(), ctx, ctx.op);
+    }
+
+    @Override
+    public Type visitComparisonExpression(LanguageParser.ComparisonExpressionContext ctx) {
+        Type leftType = visit(ctx.expression(0));
+        Type rightType = visit(ctx.expression(1));
+
+        return checkExpression(leftType, rightType, ctx.op.getText(), ctx, ctx.op);
+    }
+
+    @Override
+    public Type visitLogicExpression(LanguageParser.LogicExpressionContext ctx) {
+        Type leftType = visit(ctx.expression(0));
+        Type rightType = visit(ctx.expression(1));
+
+        return checkExpression(leftType, rightType, ctx.op.getText(), ctx, ctx.op);
+    }
+
+    @Override
+    public Type visitNotExpression(LanguageParser.NotExpressionContext ctx) {
+        Type exprType = visit(ctx.expression());
+
+        Type result = Type.resultType(exprType, ctx.op.getText());
+        if (result == Type.ERROR) {
+            ErrorLogger.addError(ctx, ctx.op, "Incompatible type %s, must be bool!", exprType);
         }
 
-        return leftType;
+        return result;
+    }
+
+    @Override
+    public Type visitNegExpression(LanguageParser.NegExpressionContext ctx) {
+        Type exprType = visit(ctx.expression());
+
+        Type result = Type.resultType(exprType, ctx.op.getText());
+        if (result == Type.ERROR) {
+            ErrorLogger.addError(ctx, ctx.op, "Incompatible type %s, must be int or float!", exprType);
+        }
+
+        return result;
+    }
+
+    private Type checkExpression(Type left, Type right, String operator, LanguageParser.ExpressionContext ctx, Token op) {
+        Type result = Type.resultType(left, right, operator);
+        if (result == Type.ERROR) {
+            ErrorLogger.addError(ctx, op, "Incompatible types %s and %s", left, right);
+        }
+
+        return result;
+    }
+
+    @Override
+    public Type visitVarExpression(LanguageParser.VarExpressionContext ctx) {
+        String varName = ctx.VAR().getText();
+        log.warn("Resolving variable {}", varName);
+        if (symbolTable.containsKey(varName)) {
+            log.warn(" - Found variable {}", varName);
+            return symbolTable.get(varName);
+        }
+
+        ErrorLogger.addError(ctx, ctx.VAR().getSymbol(),"Variable %s not declared", varName);
+        return Type.ERROR;
     }
 
     @Override
@@ -63,18 +175,26 @@ public class LanguageTypeVisitor extends LanguageBaseVisitor<Type> implements La
             return Type.STRING;
         }
 
-        ErrorLogger.addError(ctx, "Unknown literal type %s", ctx.literal().getText());
+        ErrorLogger.addError(ctx, ctx.literal().start,"Unknown literal type %s", ctx.literal().getText());
         return Type.ERROR;
     }
 
     @Override
-    public Type visitVarExpression(LanguageParser.VarExpressionContext ctx) {
+    public Type visitAssignExpression(LanguageParser.AssignExpressionContext ctx) {
         String varName = ctx.VAR().getText();
-        if (symbolTable.containsKey(varName)) {
-            return symbolTable.get(varName);
+        Type varType = symbolTable.getOrDefault(varName, Type.ERROR);
+        Type exprType = visit(ctx.expression());
+
+        if (varType == Type.INT && exprType == Type.FLOAT) {
+            return Type.FLOAT;
+        } else if (varType == Type.FLOAT && exprType == Type.INT) {
+            return Type.INT;
         }
 
-        ErrorLogger.addError(ctx, "Variable %s not declared", varName);
-        return Type.ERROR;
+        if (!varType.equals(exprType)) {
+            ErrorLogger.addError(ctx, null, "Trying to assign %s to %s", exprType, varType);
+        }
+
+        return varType;
     }
 }

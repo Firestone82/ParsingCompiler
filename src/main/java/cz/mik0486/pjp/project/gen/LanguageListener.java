@@ -114,6 +114,18 @@ public interface LanguageListener extends ParseTreeListener {
 	 */
 	void exitWhileStatement(LanguageParser.WhileStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code doWhileStatement}
+	 * labeled alternative in {@link LanguageParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterDoWhileStatement(LanguageParser.DoWhileStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code doWhileStatement}
+	 * labeled alternative in {@link LanguageParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitDoWhileStatement(LanguageParser.DoWhileStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code forStatement}
 	 * labeled alternative in {@link LanguageParser#statement}.
 	 * @param ctx the parse tree

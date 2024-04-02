@@ -73,6 +73,13 @@ public interface LanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitWhileStatement(LanguageParser.WhileStatementContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code doWhileStatement}
+	 * labeled alternative in {@link LanguageParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDoWhileStatement(LanguageParser.DoWhileStatementContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code forStatement}
 	 * labeled alternative in {@link LanguageParser#statement}.
 	 * @param ctx the parse tree

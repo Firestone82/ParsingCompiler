@@ -5,13 +5,13 @@ import cz.mik0486.pjp.project.antlr.error.ErrorLogger;
 import cz.mik0486.pjp.project.gen.LanguageLexer;
 import cz.mik0486.pjp.project.gen.LanguageParser;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,12 +35,16 @@ public class Program {
         this.inputFilePath = null;
     }
 
+    public Program(String programName, Path fileInputPath) {
+        this.programName = programName;
+        this.inputText = null;
+        this.inputFilePath = fileInputPath.toString();
+    }
+
     public boolean init() {
         long startTime = System.currentTimeMillis();
 
-        log.info("Initializing program %s".formatted(programName));
-        log.debug(" - Loading input file src/main/antlr4/%s".formatted(inputFilePath));
-
+        log.info("Initializing program \"%s\"".formatted(programName));
         CharStream input = null;
 
         if (inputFilePath != null) {
@@ -64,7 +68,7 @@ public class Program {
                 return false;
             }
         } else {
-            log.debug(" - Using input text");
+            log.debug(" - Using text input");
             input = CharStreams.fromString(inputText);
         }
 
@@ -93,7 +97,7 @@ public class Program {
         }
 
         long endTime = System.currentTimeMillis();
-        log.info("Program %s initialized in %d ms".formatted(programName, (endTime - startTime)));
+        log.info("Program initialized in %d ms".formatted(endTime - startTime));
         return true;
     }
 
