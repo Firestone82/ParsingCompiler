@@ -52,7 +52,7 @@ public enum Type {
                 yield ERROR;
 
             case "=":
-                if (left == INT && right == FLOAT) yield INT;
+                if (left == INT && right == INT) yield INT;
                 if (left == FLOAT && right == INT) yield FLOAT;
                 if (left == STRING && right == STRING) yield STRING;
                 if (left == BOOL && right == BOOL) yield BOOL;

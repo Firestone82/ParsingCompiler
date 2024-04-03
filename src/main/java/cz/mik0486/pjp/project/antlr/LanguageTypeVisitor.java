@@ -185,9 +185,7 @@ public class LanguageTypeVisitor extends LanguageBaseVisitor<Type> implements La
         Type varType = symbolTable.getOrDefault(varName, Type.ERROR);
         Type exprType = visit(ctx.expression());
 
-        if (varType == Type.INT && exprType == Type.FLOAT) {
-            return Type.FLOAT;
-        } else if (varType == Type.FLOAT && exprType == Type.INT) {
+        if (varType == Type.FLOAT && exprType == Type.INT) {
             return Type.INT;
         }
 
