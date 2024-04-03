@@ -1,5 +1,6 @@
 package cz.mik0486.pjp.project.statement;
 
+import cz.mik0486.pjp.project.TestClass;
 import cz.mik0486.pjp.project.antlr.Program;
 import cz.mik0486.pjp.project.antlr.error.ErrorLogger;
 import org.junit.jupiter.api.AfterEach;
@@ -7,12 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class BlockTests {
-
-    @AfterEach
-    public void reset() {
-        ErrorLogger.clearErrors();
-    }
+public class BlockTests extends TestClass {
 
     @Test
     public void testEmptyBlock() {

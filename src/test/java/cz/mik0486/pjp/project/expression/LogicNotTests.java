@@ -9,13 +9,12 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class UnaryMinusTests extends TestClass {
+public class LogicNotTests extends TestClass {
 
     @Test
-    public void testWriteInt() {
+    public void testLogicNot() {
         String input = """
-            int a;
-            write a;
+            !false;
         """;
 
         Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
@@ -23,76 +22,43 @@ public class UnaryMinusTests extends TestClass {
     }
 
     @Test
-    public void testWriteFloat() {
+    public void testLogicNotInt() {
+        String input = """
+            int a;
+            !a;
+        """;
+
+        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
+        assertFalse(program.init());
+    }
+
+    @Test
+    public void testLogicNotFloat() {
         String input = """
             float a;
-            write a;
+            !a;
         """;
 
         Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        assertFalse(program.init());
     }
 
     @Test
-    public void testWriteString() {
+    public void testLogicNotString() {
         String input = """
             string a;
-            write a;
+            !a;
         """;
 
         Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        assertFalse(program.init());
     }
 
     @Test
-    public void testWriteBool() {
+    public void testLogicNotBool() {
         String input = """
             bool a;
-            write a;
-        """;
-
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
-    }
-
-    @Test
-    public void testWriteMultipleVariables() {
-        String input = """
-            int a;
-            float b;
-            string c;
-            bool d;
-            write a, b, c, d;
-        """;
-
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
-    }
-
-    @Test
-    public void testWriteNoDeclaration() {
-        String input = """
-            write a;
-        """;
-
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertFalse(program.init());
-    }
-
-    @Test
-    public void testWriteNonsense() {
-        String input = """
-            write "ahoj" > 5;
-        """;
-
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertFalse(program.init());
-    }
-
-    @Test
-    public void testWriteWord() {
-        String input = """
-            write "ahoj";
+            !a;
         """;
 
         Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);

@@ -1,5 +1,6 @@
 package cz.mik0486.pjp.project.statement;
 
+import cz.mik0486.pjp.project.TestClass;
 import cz.mik0486.pjp.project.antlr.Program;
 import cz.mik0486.pjp.project.antlr.error.ErrorLogger;
 import org.junit.jupiter.api.AfterEach;
@@ -8,12 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class IfTests {
-
-    @AfterEach
-    public void reset() {
-        ErrorLogger.clearErrors();
-    }
+public class IfTests extends TestClass {
 
     @Test
     public void testWriteInt() {
@@ -131,5 +127,23 @@ public class IfTests {
 
         Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
         assertFalse(program.init());
+    }
+
+    @Test
+    public void testComplexIf() {
+        String input = """
+            int x;
+            x = 5;
+            if (x > 0 && x < 10) {
+                int a;
+            } else if (x > 10 && x < 20) {
+                float b;
+            } else {
+                string c;
+            }
+        """;
+
+        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
+        assertTrue(program.init());
     }
 }

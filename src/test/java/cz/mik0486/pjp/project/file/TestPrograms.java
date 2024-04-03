@@ -1,5 +1,6 @@
 package cz.mik0486.pjp.project.file;
 
+import cz.mik0486.pjp.project.TestClass;
 import cz.mik0486.pjp.project.antlr.Program;
 import cz.mik0486.pjp.project.antlr.error.ErrorLogger;
 import lombok.extern.slf4j.Slf4j;
@@ -12,12 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
-public class TestPrograms {
-
-    @AfterEach
-    public void reset() {
-        ErrorLogger.clearErrors();
-    }
+public class TestPrograms extends TestClass {
 
     @Test
     public void testProgram1() {

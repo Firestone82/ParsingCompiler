@@ -2,20 +2,16 @@ package cz.mik0486.pjp.project.expression;
 
 import cz.mik0486.pjp.project.TestClass;
 import cz.mik0486.pjp.project.antlr.Program;
-import cz.mik0486.pjp.project.antlr.error.ErrorLogger;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class UnaryMinusTests extends TestClass {
+public class ParenthesisTests extends TestClass {
 
     @Test
-    public void testWriteInt() {
+    public void testParenthesis() {
         String input = """
-            int a;
-            write a;
+            (true);
         """;
 
         Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
@@ -23,10 +19,21 @@ public class UnaryMinusTests extends TestClass {
     }
 
     @Test
-    public void testWriteFloat() {
+    public void testParenthesisInt() {
+        String input = """
+            int a;
+            (a);
+        """;
+
+        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
+        assertTrue(program.init());
+    }
+
+    @Test
+    public void testParenthesisFloat() {
         String input = """
             float a;
-            write a;
+            (a);
         """;
 
         Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
@@ -34,10 +41,10 @@ public class UnaryMinusTests extends TestClass {
     }
 
     @Test
-    public void testWriteString() {
+    public void testParenthesisString() {
         String input = """
             string a;
-            write a;
+            (a);
         """;
 
         Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
@@ -45,10 +52,10 @@ public class UnaryMinusTests extends TestClass {
     }
 
     @Test
-    public void testWriteBool() {
+    public void testParenthesisBool() {
         String input = """
             bool a;
-            write a;
+            (a);
         """;
 
         Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
@@ -56,43 +63,9 @@ public class UnaryMinusTests extends TestClass {
     }
 
     @Test
-    public void testWriteMultipleVariables() {
+    public void testParenthesisOperation() {
         String input = """
-            int a;
-            float b;
-            string c;
-            bool d;
-            write a, b, c, d;
-        """;
-
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
-    }
-
-    @Test
-    public void testWriteNoDeclaration() {
-        String input = """
-            write a;
-        """;
-
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertFalse(program.init());
-    }
-
-    @Test
-    public void testWriteNonsense() {
-        String input = """
-            write "ahoj" > 5;
-        """;
-
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertFalse(program.init());
-    }
-
-    @Test
-    public void testWriteWord() {
-        String input = """
-            write "ahoj";
+            (true && false);
         """;
 
         Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);

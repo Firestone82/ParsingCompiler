@@ -9,13 +9,12 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class UnaryMinusTests extends TestClass {
+public class ComparisonTests extends TestClass {
 
     @Test
-    public void testWriteInt() {
+    public void testEqual() {
         String input = """
-            int a;
-            write a;
+            2 == 2;
         """;
 
         Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
@@ -23,10 +22,33 @@ public class UnaryMinusTests extends TestClass {
     }
 
     @Test
-    public void testWriteFloat() {
+    public void testNotEqual() {
+        String input = """
+            2 != 2;
+        """;
+
+        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
+        assertTrue(program.init());
+    }
+
+    @Test
+    public void testInt() {
+        String input = """
+            int a;
+            int b;
+            a == b;
+        """;
+
+        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
+        assertTrue(program.init());
+    }
+
+    @Test
+    public void testFloat() {
         String input = """
             float a;
-            write a;
+            float b;
+            a == b;
         """;
 
         Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
@@ -34,10 +56,11 @@ public class UnaryMinusTests extends TestClass {
     }
 
     @Test
-    public void testWriteString() {
+    public void testString() {
         String input = """
             string a;
-            write a;
+            string b;
+            a == b;
         """;
 
         Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
@@ -45,57 +68,14 @@ public class UnaryMinusTests extends TestClass {
     }
 
     @Test
-    public void testWriteBool() {
+    public void testBool() {
         String input = """
             bool a;
-            write a;
-        """;
-
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
-    }
-
-    @Test
-    public void testWriteMultipleVariables() {
-        String input = """
-            int a;
-            float b;
-            string c;
-            bool d;
-            write a, b, c, d;
-        """;
-
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
-    }
-
-    @Test
-    public void testWriteNoDeclaration() {
-        String input = """
-            write a;
+            bool b;
+            a == b;
         """;
 
         Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
         assertFalse(program.init());
-    }
-
-    @Test
-    public void testWriteNonsense() {
-        String input = """
-            write "ahoj" > 5;
-        """;
-
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertFalse(program.init());
-    }
-
-    @Test
-    public void testWriteWord() {
-        String input = """
-            write "ahoj";
-        """;
-
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
     }
 }
