@@ -26,7 +26,6 @@ public class LanguageTypeVisitor extends LanguageBaseVisitor<Type> implements La
                 errored = true;
             }
 
-            log.info("Declaring variable {} of type {}", terminal.getText(), type);
             symbolTable.put(terminal.getText(), type);
         }
 
@@ -153,9 +152,8 @@ public class LanguageTypeVisitor extends LanguageBaseVisitor<Type> implements La
     @Override
     public Type visitVarExpression(LanguageParser.VarExpressionContext ctx) {
         String varName = ctx.VAR().getText();
-        log.warn("Resolving variable {}", varName);
+
         if (symbolTable.containsKey(varName)) {
-            log.warn(" - Found variable {}", varName);
             return symbolTable.get(varName);
         }
 
