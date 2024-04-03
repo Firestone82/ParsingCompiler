@@ -1,8 +1,9 @@
 package cz.mik0486.pjp.project;
 
+import cz.mik0486.pjp.project.antlr.LanguageAAAA;
 import cz.mik0486.pjp.project.antlr.Program;
 import lombok.extern.slf4j.Slf4j;
-import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.nio.file.Path;
 
@@ -16,8 +17,11 @@ public class Main {
             return;
         }
 
-        for (ParserRuleContext expr : programTest1.getExpressions()) {
-            log.debug("Expression: " + expr.toStringTree(programTest1.getParser()));
-        }
+        ParseTreeWalker walker = new ParseTreeWalker();
+        walker.walk(new LanguageAAAA(), programTest1.getContext());
+
+//        for (ParserRuleContext expr : programTest1.getExpressions()) {
+//            log.debug("Expression: " + expr.toStringTree(programTest1.getParser()));
+//        }
     }
 }
