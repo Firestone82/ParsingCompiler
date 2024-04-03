@@ -44,11 +44,11 @@ public class Program {
     public boolean init() {
         long startTime = System.currentTimeMillis();
 
-        log.info("Initializing program \"%s\"".formatted(programName));
+        log.info(STR . "Initializing program \"\{ programName }\"");
         CharStream input = null;
 
         if (inputFilePath != null) {
-            log.debug(" - Loading input file src/main/antlr4/%s".formatted(inputFilePath));
+            log.debug(STR . " - Loading input file src/main/antlr4/\{ inputFilePath }");
 
             File inputFile = new File("src/main/antlr4", inputFilePath);
             if (!inputFile.exists()) {
@@ -64,12 +64,21 @@ public class Program {
                     System.exit(1);
                 }
             } catch (Exception e) {
-                log.error("    - Error while loading input file: %s".formatted(e.getMessage()));
+                log.error(STR . "    - Error while loading input file: \{ e.getMessage() }");
                 return false;
             }
         } else {
             log.debug(" - Using text input");
-            input = CharStreams.fromString(inputText);
+            StringBuilder sb = new StringBuilder();
+
+            int i = 1;
+            for (String line : inputText.split("\n")) {
+                sb.append(line.trim()).append("\n");
+                log.debug(STR . " | \{ i } | \{ line.trim() }");
+                i++;
+            }
+
+            input = CharStreams.fromString(sb.toString());
         }
 
         lexer = new LanguageLexer(input);
@@ -93,11 +102,12 @@ public class Program {
         if (ErrorLogger.hasErrors()) {
             log.error(" - Type errors found!");
             ErrorLogger.printErrors();
+
+            log.info("Program initialization failed. Took %d ms".formatted(System.currentTimeMillis() - startTime));
             return false;
         }
 
-        long endTime = System.currentTimeMillis();
-        log.info("Program initialized in %d ms".formatted(endTime - startTime));
+        log.info("Program initialized successfully. Took %d ms".formatted(System.currentTimeMillis() - startTime));
         return true;
     }
 

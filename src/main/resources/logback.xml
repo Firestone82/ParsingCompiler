@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <conversionRule conversionWord="coloredHighlight"
-                    converterClass="cz.mik0486.pjp.project.logging.ColoredHighlighting"/>
+    <conversionRule conversionWord="coloredText"
+                    converterClass="cz.mik0486.pjp.project.logging.ColoredHighlightingText"/>
+
+    <conversionRule conversionWord="coloredType"
+                    converterClass="cz.mik0486.pjp.project.logging.ColoredHighlightingType"/>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%white%d{yyyy-MM-dd HH:mm:ss} | %coloredHighlight(%-5(%level)) | %cyan(%logger{10}) : %msg%n
-            </pattern>
+            <pattern>%white%d{yyyy-MM-dd HH:mm:ss} | %coloredType(%-5(%level)) | %cyan(%logger{10}) : %coloredText(%msg%n)</pattern>
             <charset>utf-8</charset>
         </encoder>
     </appender>

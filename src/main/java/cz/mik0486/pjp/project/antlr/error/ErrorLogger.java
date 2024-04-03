@@ -33,12 +33,14 @@ public class ErrorLogger {
             charPos = ctx.getStart().getCharPositionInLine();
         }
 
+        String line = ctx.getStart().getInputStream().toString().split("\n")[lineNum - 1];
         String message = error.formatted(args);
+
         getInstance().errors.add("""
                 (.num.). Type error at line %d:%d! %s
                 |  - Statement: %s
                 |               %s
-                """.formatted(lineNum, charPos, message, ctx.getText(), " ".repeat(charPos) + "^"));
+                """.formatted(lineNum, charPos, message, line, " ".repeat(charPos) + "^"));
     }
 
     public static void clearErrors() {
