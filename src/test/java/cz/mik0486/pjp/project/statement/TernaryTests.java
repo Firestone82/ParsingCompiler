@@ -1,11 +1,7 @@
 package cz.mik0486.pjp.project.statement;
 
 import cz.mik0486.pjp.project.TestClass;
-import cz.mik0486.pjp.project.antlr.Program;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TernaryTests extends TestClass {
 
@@ -20,8 +16,11 @@ public class TernaryTests extends TestClass {
             c = (a > b ? a : b);
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            TODO
+        """;
+
+        processSuccess(input, null, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -35,8 +34,11 @@ public class TernaryTests extends TestClass {
             c = a > b ? a : b;
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            TODO
+        """;
+
+        processSuccess(input, null, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -50,8 +52,11 @@ public class TernaryTests extends TestClass {
             c = (a > b ? a : b);
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            TODO
+        """;
+
+        processSuccess(input, null, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -65,8 +70,7 @@ public class TernaryTests extends TestClass {
             c = (a ? a : b);
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertFalse(program.init());
+        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -80,8 +84,7 @@ public class TernaryTests extends TestClass {
             c = (a > b ? a : b);
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertFalse(program.init());
+        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -95,7 +98,6 @@ public class TernaryTests extends TestClass {
             c = (true ? a : b);
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertFalse(program.init());
+        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }

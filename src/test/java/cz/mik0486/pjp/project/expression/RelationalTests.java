@@ -3,18 +3,18 @@ package cz.mik0486.pjp.project.expression;
 import cz.mik0486.pjp.project.TestClass;
 import org.junit.jupiter.api.Test;
 
-public class ModuloTests extends TestClass {
+public class RelationalTests extends TestClass {
 
     @Test
-    public void testModulo() {
+    public void testGreater() {
         String input = """
-            3 % 2;
+            1 > 2;
         """;
 
         String compiled = """
-            push I 3
+            push I 1
             push I 2
-            mod
+            gt
             pop
         """;
 
@@ -22,11 +22,27 @@ public class ModuloTests extends TestClass {
     }
 
     @Test
-    public void testModuloInt() {
+    public void testLess() {
+        String input = """
+            1 < 2;
+        """;
+
+        String compiled = """
+            push I 1
+            push I 2
+            lt
+            pop
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+    }
+
+    @Test
+    public void testInt() {
         String input = """
             int a;
             int b;
-            a % b;
+            a > b;
         """;
 
         String compiled = """
@@ -36,7 +52,7 @@ public class ModuloTests extends TestClass {
             save b
             load a
             load b
-            mod
+            gt
             pop
         """;
 
@@ -44,33 +60,44 @@ public class ModuloTests extends TestClass {
     }
 
     @Test
-    public void testModuloFloat() {
+    public void testFloat() {
         String input = """
             float a;
             float b;
-            a % b;
+            a > b;
         """;
 
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String compiled = """
+            push F 0.0
+            save a
+            push F 0.0
+            save b
+            load a
+            load b
+            gt
+            pop
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
-    public void testModuloString() {
+    public void testString() {
         String input = """
             string a;
             string b;
-            a % b;
+            a > b;
         """;
 
         processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
-    public void testModuloBool() {
+    public void testBool() {
         String input = """
             bool a;
             bool b;
-            a % b;
+            a > b;
         """;
 
         processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());

@@ -1,13 +1,7 @@
 package cz.mik0486.pjp.project.statement;
 
 import cz.mik0486.pjp.project.TestClass;
-import cz.mik0486.pjp.project.antlr.Program;
-import cz.mik0486.pjp.project.antlr.error.ErrorLogger;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class VariableDeclarationTests extends TestClass {
 
@@ -20,8 +14,22 @@ public class VariableDeclarationTests extends TestClass {
             string chachar;
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            push I 0
+            save a
+            push I 0
+            save b
+            push I 0
+            save c
+            push B false
+            save d
+            push F 0.0
+            save e
+            push S ""
+            save chachar
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -31,8 +39,7 @@ public class VariableDeclarationTests extends TestClass {
             int a;
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertFalse(program.init());
+        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -42,7 +49,6 @@ public class VariableDeclarationTests extends TestClass {
             bool a;
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertFalse(program.init());
+        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }

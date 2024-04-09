@@ -1,12 +1,7 @@
 package cz.mik0486.pjp.project.statement;
 
 import cz.mik0486.pjp.project.TestClass;
-import cz.mik0486.pjp.project.antlr.Program;
-import cz.mik0486.pjp.project.antlr.error.ErrorLogger;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BlockTests extends TestClass {
 
@@ -17,8 +12,10 @@ public class BlockTests extends TestClass {
             }
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -29,8 +26,12 @@ public class BlockTests extends TestClass {
             }
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            push I 0
+            save a
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -44,7 +45,17 @@ public class BlockTests extends TestClass {
             }
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            push I 0
+            save a
+            push F 0.0
+            save b
+            push S ""
+            save c
+            push B false
+            save d
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }

@@ -3,18 +3,18 @@ package cz.mik0486.pjp.project.expression;
 import cz.mik0486.pjp.project.TestClass;
 import org.junit.jupiter.api.Test;
 
-public class ComparisonTests extends TestClass {
+public class ArithmeticTests extends TestClass {
 
     @Test
-    public void testEqual() {
+    public void testAddition() {
         String input = """
-            2 == 2;
+            2 + 2;
         """;
 
         String compiled = """
             push I 2
             push I 2
-            eq
+            add
             pop
         """;
 
@@ -22,16 +22,47 @@ public class ComparisonTests extends TestClass {
     }
 
     @Test
-    public void testNotEqual() {
+    public void testSubtraction() {
         String input = """
-            2 != 2;
+            2 - 2;
         """;
 
         String compiled = """
             push I 2
             push I 2
-            eq
-            not
+            sub
+            pop
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+    }
+
+    @Test
+    public void testMultiplication() {
+        String input = """
+            2 * 2;
+        """;
+
+        String compiled = """
+            push I 2
+            push I 2
+            mul
+            pop
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+    }
+
+    @Test
+    public void testDivision() {
+        String input = """
+            2 / 2;
+        """;
+
+        String compiled = """
+            push I 2
+            push I 2
+            div
             pop
         """;
 
@@ -43,7 +74,7 @@ public class ComparisonTests extends TestClass {
         String input = """
             int a;
             int b;
-            a == b;
+            a + b;
         """;
 
         String compiled = """
@@ -53,7 +84,7 @@ public class ComparisonTests extends TestClass {
             save b
             load a
             load b
-            eq
+            add
             pop
         """;
 
@@ -65,7 +96,7 @@ public class ComparisonTests extends TestClass {
         String input = """
             float a;
             float b;
-            a == b;
+            a + b;
         """;
 
         String compiled = """
@@ -75,7 +106,30 @@ public class ComparisonTests extends TestClass {
             save b
             load a
             load b
-            eq
+            add
+            pop
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+    }
+
+    @Test
+    public void testRecast() {
+        String input = """
+            int a;
+            float b;
+            a + b;
+        """;
+
+        String compiled = """
+            push I 0
+            save a
+            push F 0.0
+            save b
+            load a
+            itof
+            load b
+            add
             pop
         """;
 
@@ -87,21 +141,10 @@ public class ComparisonTests extends TestClass {
         String input = """
             string a;
             string b;
-            a == b;
+            a + b;
         """;
 
-        String compiled = """
-            push S ""
-            save a
-            push S ""
-            save b
-            load a
-            load b
-            eq
-            pop
-        """;
-
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -109,7 +152,16 @@ public class ComparisonTests extends TestClass {
         String input = """
             bool a;
             bool b;
-            a == b;
+            a + b;
+        """;
+
+        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+    }
+
+    @Test
+    public void testNotDeclared() {
+        String input = """
+            a + b;
         """;
 
         processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());

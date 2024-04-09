@@ -1,13 +1,7 @@
 package cz.mik0486.pjp.project.expression;
 
 import cz.mik0486.pjp.project.TestClass;
-import cz.mik0486.pjp.project.antlr.Program;
-import cz.mik0486.pjp.project.antlr.error.ErrorLogger;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AssignmentTests extends TestClass {
 
@@ -18,8 +12,16 @@ public class AssignmentTests extends TestClass {
             a = 5;
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            push I 0
+            save a
+            push I 5
+            save a
+            load a
+            pop
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -29,8 +31,16 @@ public class AssignmentTests extends TestClass {
             a = 5.0;
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            push F 0.0
+            save a
+            push F 5.0
+            save a
+            load a
+            pop
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -40,8 +50,16 @@ public class AssignmentTests extends TestClass {
             a = "hello";
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            push S ""
+            save a
+            push S "hello"
+            save a
+            load a
+            pop
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -51,8 +69,16 @@ public class AssignmentTests extends TestClass {
             a = true;
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            push B false
+            save a
+            push B true
+            save a
+            load a
+            pop
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -65,7 +91,27 @@ public class AssignmentTests extends TestClass {
             b = 5;
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertFalse(program.init());
+
+        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+    }
+
+    @Test
+    public void testAssignIntToFloat() {
+        String input = """
+            float a;
+            a = 5;
+        """;
+
+        String compiled = """
+            push F 0.0
+            save a
+            push I 5
+            itof
+            save a
+            load a
+            pop
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }

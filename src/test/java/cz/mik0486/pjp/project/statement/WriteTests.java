@@ -1,13 +1,7 @@
 package cz.mik0486.pjp.project.statement;
 
 import cz.mik0486.pjp.project.TestClass;
-import cz.mik0486.pjp.project.antlr.Program;
-import cz.mik0486.pjp.project.antlr.error.ErrorLogger;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class WriteTests extends TestClass {
 
@@ -18,8 +12,14 @@ public class WriteTests extends TestClass {
             write a;
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            push I 0
+            save a
+            load a
+            print 1
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -29,8 +29,14 @@ public class WriteTests extends TestClass {
             write a;
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            push F 0.0
+            save a
+            load a
+            print 1
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -40,8 +46,14 @@ public class WriteTests extends TestClass {
             write a;
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            push S ""
+            save a
+            load a
+            print 1
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -51,8 +63,14 @@ public class WriteTests extends TestClass {
             write a;
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            push B false
+            save a
+            load a
+            print 1
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -65,8 +83,23 @@ public class WriteTests extends TestClass {
             write a, b, c, d;
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            push I 0
+            save a
+            push F 0.0
+            save b
+            push S ""
+            save c
+            push B false
+            save d
+            load a
+            load b
+            load c
+            load d
+            print 4
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -75,8 +108,7 @@ public class WriteTests extends TestClass {
             write a;
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertFalse(program.init());
+        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -85,8 +117,7 @@ public class WriteTests extends TestClass {
             write "ahoj" > 5;
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertFalse(program.init());
+        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -95,7 +126,11 @@ public class WriteTests extends TestClass {
             write "ahoj";
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            push S "ahoj"
+            print 1
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }

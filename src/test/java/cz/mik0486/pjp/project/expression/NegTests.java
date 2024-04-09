@@ -3,18 +3,17 @@ package cz.mik0486.pjp.project.expression;
 import cz.mik0486.pjp.project.TestClass;
 import org.junit.jupiter.api.Test;
 
-public class ModuloTests extends TestClass {
+public class NegTests extends TestClass {
 
     @Test
-    public void testModulo() {
+    public void testUnaryMinusInt() {
         String input = """
-            3 % 2;
+            -1;
         """;
 
         String compiled = """
-            push I 3
-            push I 2
-            mod
+            push I 1
+            uminus
             pop
         """;
 
@@ -22,21 +21,14 @@ public class ModuloTests extends TestClass {
     }
 
     @Test
-    public void testModuloInt() {
+    public void testUnaryMinusFloat() {
         String input = """
-            int a;
-            int b;
-            a % b;
+            -1.0;
         """;
 
         String compiled = """
-            push I 0
-            save a
-            push I 0
-            save b
-            load a
-            load b
-            mod
+            push F 1.0
+            uminus
             pop
         """;
 
@@ -44,33 +36,18 @@ public class ModuloTests extends TestClass {
     }
 
     @Test
-    public void testModuloFloat() {
+    public void testUnaryMinusBool() {
         String input = """
-            float a;
-            float b;
-            a % b;
+            -true;
         """;
 
         processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
-    public void testModuloString() {
+    public void testUnaryMinusString() {
         String input = """
-            string a;
-            string b;
-            a % b;
-        """;
-
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
-    }
-
-    @Test
-    public void testModuloBool() {
-        String input = """
-            bool a;
-            bool b;
-            a % b;
+            -"string";
         """;
 
         processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());

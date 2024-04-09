@@ -9,10 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -28,6 +28,7 @@ public class Program {
     private LanguageParser parser;
 
     private LanguageParser.ProgramContext context;
+    private List<String> compiledCodeLines;
 
     public Program(String programName, String inputText) {
         this.programName = programName;
@@ -58,6 +59,7 @@ public class Program {
 
             try {
                 input = CharStreams.fromFileName(inputFile.getAbsolutePath());
+                inputText = input.toString();
 
                 if (input.size() == 0) {
                     log.error("    - Input file is empty");
@@ -67,6 +69,7 @@ public class Program {
                 log.error("    - Error while loading input file: %s".formatted(e.getMessage()));
                 return false;
             }
+
         } else {
             log.debug(" - Using text input");
 
@@ -98,7 +101,15 @@ public class Program {
             return false;
         }
 
-        // Run type checking
+        long endTime = System.currentTimeMillis();
+        log.info("Program initialized in %d ms".formatted(endTime - startTime));
+        return true;
+    }
+
+    public boolean check() {
+        long startTime = System.currentTimeMillis();
+        log.debug(" - Running type check");
+
         LanguageTypeVisitor visitor = new LanguageTypeVisitor();
         visitor.visit(context);
 
@@ -108,30 +119,46 @@ public class Program {
             return false;
         }
 
-        long endTime = System.currentTimeMillis();
-        log.info("Program initialized in %d ms".formatted(endTime - startTime));
+        log.trace(" - Total rows: {}", inputText.split("\n").length);
+        log.trace(" - Code contains no type errors");
+
+        log.info("Type check passed in %d ms".formatted(System.currentTimeMillis() - startTime));
         return true;
     }
 
-    public List<LanguageParser.StatementContext> getExpressions() {
-        if (!check()) {
-            return new ArrayList<>();
+    public boolean compile() {
+        long startTime = System.currentTimeMillis();
+        log.debug(" - Compiling program");
+
+        LanguageProcessor languageProcessor = new LanguageProcessor();
+        new ParseTreeWalker().walk(languageProcessor, context);
+        compiledCodeLines = languageProcessor.getCompiledCodeLines();
+
+        int totalLines = String.valueOf(compiledCodeLines.size()).length();
+        int lineNum = 1;
+
+        for (String line : languageProcessor.getCompiledCodeLines()) {
+            String lineNumStr = " ".repeat(totalLines - String.valueOf(lineNum).length()) + lineNum;
+            lineNum++;
+
+            log.trace((STR . " | \{ lineNumStr } | \{ line }"));
         }
 
-        return context.statement();
+        if (ErrorLogger.hasErrors()) {
+            log.error(" - Compilation errors found!");
+            ErrorLogger.printErrors();
+            return false;
+        }
+
+        log.info("Compilation finished in %d ms".formatted(System.currentTimeMillis() - startTime));
+        return true;
     }
 
-    private boolean check() {
-        if (lexer == null || tokens == null || parser == null) {
-            log.error("Program %s not initialized".formatted(programName));
-            return false;
+    public String getCompiledCode() {
+        if (compiledCodeLines == null) {
+            return null;
         }
 
-        if (context == null) {
-            log.error("Program %s not parsed".formatted(programName));
-            return false;
-        }
-
-        return true;
+        return String.join("\n", compiledCodeLines);
     }
 }

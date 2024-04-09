@@ -1,10 +1,7 @@
 package cz.mik0486.pjp.project.expression;
 
 import cz.mik0486.pjp.project.TestClass;
-import cz.mik0486.pjp.project.antlr.Program;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ParenthesisTests extends TestClass {
 
@@ -14,8 +11,12 @@ public class ParenthesisTests extends TestClass {
             (true);
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            push B true
+            pop
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -25,8 +26,14 @@ public class ParenthesisTests extends TestClass {
             (a);
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            push I 0
+            save a
+            load a
+            pop
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -36,8 +43,14 @@ public class ParenthesisTests extends TestClass {
             (a);
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            push F 0.0
+            save a
+            load a
+            pop
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -47,8 +60,14 @@ public class ParenthesisTests extends TestClass {
             (a);
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            push S ""
+            save a
+            load a
+            pop
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -58,8 +77,14 @@ public class ParenthesisTests extends TestClass {
             (a);
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            push B false
+            save a
+            load a
+            pop
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
@@ -68,7 +93,13 @@ public class ParenthesisTests extends TestClass {
             (true && false);
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            push B true
+            push B false
+            and
+            pop
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }

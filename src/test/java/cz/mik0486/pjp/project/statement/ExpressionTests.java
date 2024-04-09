@@ -1,12 +1,7 @@
 package cz.mik0486.pjp.project.statement;
 
 import cz.mik0486.pjp.project.TestClass;
-import cz.mik0486.pjp.project.antlr.Program;
-import cz.mik0486.pjp.project.antlr.error.ErrorLogger;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ExpressionTests extends TestClass {
 
@@ -26,7 +21,6 @@ public class ExpressionTests extends TestClass {
             true || false;
             !true;
             -1;
-            +1;
             1;
             1.0;
             "string";
@@ -34,7 +28,70 @@ public class ExpressionTests extends TestClass {
             false;
         """;
 
-        Program program = new Program(Thread.currentThread().getStackTrace()[1].getMethodName(), input);
-        assertTrue(program.init());
+        String compiled = """
+            push I 1
+            push I 2
+            add
+            pop
+            push I 1
+            push I 2
+            sub
+            pop
+            push I 1
+            push I 2
+            mul
+            pop
+            push I 1
+            push I 2
+            div
+            pop
+            push I 1
+            push I 2
+            mod
+            pop
+            push I 1
+            push I 2
+            eq
+            pop
+            push I 1
+            push I 2
+            eq
+            not
+            pop
+            push I 1
+            push I 2
+            lt
+            pop
+            push I 1
+            push I 2
+            gt
+            pop
+            push B true
+            push B true
+            and
+            pop
+            push B true
+            push B false
+            or
+            pop
+            push B true
+            not
+            pop
+            push I 1
+            uminus
+            pop
+            push I 1
+            pop
+            push F 1.0
+            pop
+            push S "string"
+            pop
+            push B true
+            pop
+            push B false
+            pop
+        """;
+
+        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }

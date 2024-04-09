@@ -1,6 +1,6 @@
 package cz.mik0486.pjp.project;
 
-import cz.mik0486.pjp.project.antlr.LanguageAAAA;
+import cz.mik0486.pjp.project.antlr.LanguageProcessor;
 import cz.mik0486.pjp.project.antlr.Program;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -18,7 +18,10 @@ public class Main {
         }
 
         ParseTreeWalker walker = new ParseTreeWalker();
-        walker.walk(new LanguageAAAA(), programTest1.getContext());
+        LanguageProcessor languageProcessor = new LanguageProcessor();
+
+        walker.walk(languageProcessor, programTest1.getContext());
+        languageProcessor.getCompiledCodeLines().forEach(log::info);
 
 //        for (ParserRuleContext expr : programTest1.getExpressions()) {
 //            log.debug("Expression: " + expr.toStringTree(programTest1.getParser()));
