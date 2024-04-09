@@ -115,20 +115,6 @@ public interface LanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAssignExpression(LanguageParser.AssignExpressionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code aritmExpression}
-	 * labeled alternative in {@link LanguageParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAritmExpression(LanguageParser.AritmExpressionContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code logicExpression}
-	 * labeled alternative in {@link LanguageParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLogicExpression(LanguageParser.LogicExpressionContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code notExpression}
 	 * labeled alternative in {@link LanguageParser#expression}.
 	 * @param ctx the parse tree
@@ -157,6 +143,27 @@ public interface LanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParenExpression(LanguageParser.ParenExpressionContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code concatExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConcatExpression(LanguageParser.ConcatExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code aritmExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAritmExpression(LanguageParser.AritmExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code logicExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLogicExpression(LanguageParser.LogicExpressionContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code negExpression}
 	 * labeled alternative in {@link LanguageParser#expression}.
 	 * @param ctx the parse tree
@@ -171,12 +178,12 @@ public interface LanguageVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLiteralExpression(LanguageParser.LiteralExpressionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code concatExpression}
+	 * Visit a parse tree produced by the {@code ternaryExpression}
 	 * labeled alternative in {@link LanguageParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitConcatExpression(LanguageParser.ConcatExpressionContext ctx);
+	T visitTernaryExpression(LanguageParser.TernaryExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link LanguageParser#literal}.
 	 * @param ctx the parse tree

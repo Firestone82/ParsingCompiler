@@ -20,8 +20,8 @@ public class LanguageParser extends Parser {
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
 		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
 		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, T__23=24, 
-		T__24=25, T__25=26, T__26=27, INT=28, FLOAT=29, BOOL=30, STRING=31, TYPE=32, 
-		VAR=33, COMMENT=34, SPACE=35;
+		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, INT=30, FLOAT=31, BOOL=32, 
+		STRING=33, TYPE=34, VAR=35, COMMENT=36, SPACE=37;
 	public static final int
 		RULE_program = 0, RULE_statement = 1, RULE_condition = 2, RULE_expression = 3, 
 		RULE_literal = 4;
@@ -36,7 +36,8 @@ public class LanguageParser extends Parser {
 		return new String[] {
 			null, "';'", "','", "'read'", "'write'", "'{'", "'}'", "'if'", "'('", 
 			"')'", "'else'", "'while'", "'do'", "'for'", "'+'", "'-'", "'*'", "'/'", 
-			"'%'", "'.'", "'<'", "'>'", "'=='", "'!='", "'&&'", "'||'", "'!'", "'='"
+			"'%'", "'.'", "'<'", "'>'", "'=='", "'!='", "'&&'", "'||'", "'?'", "':'", 
+			"'!'", "'='"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -44,8 +45,8 @@ public class LanguageParser extends Parser {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, "INT", "FLOAT", "BOOL", "STRING", "TYPE", "VAR", 
-			"COMMENT", "SPACE"
+			null, null, null, null, null, null, "INT", "FLOAT", "BOOL", "STRING", 
+			"TYPE", "VAR", "COMMENT", "SPACE"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -146,7 +147,7 @@ public class LanguageParser extends Parser {
 				setState(13); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 16978590138L) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 67914217914L) != 0) );
 			}
 		}
 		catch (RecognitionException re) {
@@ -446,7 +447,7 @@ public class LanguageParser extends Parser {
 				break;
 			case T__7:
 			case T__14:
-			case T__25:
+			case T__27:
 			case INT:
 			case FLOAT:
 			case BOOL:
@@ -526,7 +527,7 @@ public class LanguageParser extends Parser {
 				setState(54);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 16978590138L) != 0)) {
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 67914217914L) != 0)) {
 					{
 					{
 					setState(51);
@@ -775,54 +776,6 @@ public class LanguageParser extends Parser {
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
-	public static class AritmExpressionContext extends ExpressionContext {
-		public Token op;
-		public List<ExpressionContext> expression() {
-			return getRuleContexts(ExpressionContext.class);
-		}
-		public ExpressionContext expression(int i) {
-			return getRuleContext(ExpressionContext.class,i);
-		}
-		public AritmExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LanguageListener ) ((LanguageListener)listener).enterAritmExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LanguageListener ) ((LanguageListener)listener).exitAritmExpression(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LanguageVisitor ) return ((LanguageVisitor<? extends T>)visitor).visitAritmExpression(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class LogicExpressionContext extends ExpressionContext {
-		public Token op;
-		public List<ExpressionContext> expression() {
-			return getRuleContexts(ExpressionContext.class);
-		}
-		public ExpressionContext expression(int i) {
-			return getRuleContext(ExpressionContext.class,i);
-		}
-		public LogicExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LanguageListener ) ((LanguageListener)listener).enterLogicExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LanguageListener ) ((LanguageListener)listener).exitLogicExpression(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LanguageVisitor ) return ((LanguageVisitor<? extends T>)visitor).visitLogicExpression(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
 	public static class NotExpressionContext extends ExpressionContext {
 		public Token op;
 		public ExpressionContext expression() {
@@ -912,6 +865,78 @@ public class LanguageParser extends Parser {
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
+	public static class ConcatExpressionContext extends ExpressionContext {
+		public Token op;
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+		public ConcatExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof LanguageListener ) ((LanguageListener)listener).enterConcatExpression(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof LanguageListener ) ((LanguageListener)listener).exitConcatExpression(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof LanguageVisitor ) return ((LanguageVisitor<? extends T>)visitor).visitConcatExpression(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class AritmExpressionContext extends ExpressionContext {
+		public Token op;
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+		public AritmExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof LanguageListener ) ((LanguageListener)listener).enterAritmExpression(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof LanguageListener ) ((LanguageListener)listener).exitAritmExpression(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof LanguageVisitor ) return ((LanguageVisitor<? extends T>)visitor).visitAritmExpression(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class LogicExpressionContext extends ExpressionContext {
+		public Token op;
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+		public LogicExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof LanguageListener ) ((LanguageListener)listener).enterLogicExpression(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof LanguageListener ) ((LanguageListener)listener).exitLogicExpression(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof LanguageVisitor ) return ((LanguageVisitor<? extends T>)visitor).visitLogicExpression(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
 	public static class NegExpressionContext extends ExpressionContext {
 		public Token op;
 		public ExpressionContext expression() {
@@ -953,26 +978,26 @@ public class LanguageParser extends Parser {
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
-	public static class ConcatExpressionContext extends ExpressionContext {
-		public Token op;
+	public static class TernaryExpressionContext extends ExpressionContext {
+		public Token split;
 		public List<ExpressionContext> expression() {
 			return getRuleContexts(ExpressionContext.class);
 		}
 		public ExpressionContext expression(int i) {
 			return getRuleContext(ExpressionContext.class,i);
 		}
-		public ConcatExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
+		public TernaryExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LanguageListener ) ((LanguageListener)listener).enterConcatExpression(this);
+			if ( listener instanceof LanguageListener ) ((LanguageListener)listener).enterTernaryExpression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LanguageListener ) ((LanguageListener)listener).exitConcatExpression(this);
+			if ( listener instanceof LanguageListener ) ((LanguageListener)listener).exitTernaryExpression(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LanguageVisitor ) return ((LanguageVisitor<? extends T>)visitor).visitConcatExpression(this);
+			if ( visitor instanceof LanguageVisitor ) return ((LanguageVisitor<? extends T>)visitor).visitTernaryExpression(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1016,7 +1041,7 @@ public class LanguageParser extends Parser {
 				_ctx = _localctx;
 				_prevctx = _localctx;
 				setState(100);
-				((NotExpressionContext)_localctx).op = match(T__25);
+				((NotExpressionContext)_localctx).op = match(T__27);
 				setState(101);
 				expression(5);
 				}
@@ -1058,14 +1083,14 @@ public class LanguageParser extends Parser {
 				setState(106);
 				match(VAR);
 				setState(107);
-				match(T__26);
+				match(T__28);
 				setState(108);
 				expression(1);
 				}
 				break;
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(131);
+			setState(137);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,9,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -1073,7 +1098,7 @@ public class LanguageParser extends Parser {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(129);
+					setState(135);
 					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,8,_ctx) ) {
 					case 1:
@@ -1081,7 +1106,7 @@ public class LanguageParser extends Parser {
 						_localctx = new AritmExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(111);
-						if (!(precpred(_ctx, 11))) throw new FailedPredicateException(this, "precpred(_ctx, 11)");
+						if (!(precpred(_ctx, 12))) throw new FailedPredicateException(this, "precpred(_ctx, 12)");
 						setState(112);
 						((AritmExpressionContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
@@ -1094,7 +1119,7 @@ public class LanguageParser extends Parser {
 							consume();
 						}
 						setState(113);
-						expression(12);
+						expression(13);
 						}
 						break;
 					case 2:
@@ -1102,11 +1127,11 @@ public class LanguageParser extends Parser {
 						_localctx = new ModuloExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(114);
-						if (!(precpred(_ctx, 10))) throw new FailedPredicateException(this, "precpred(_ctx, 10)");
+						if (!(precpred(_ctx, 11))) throw new FailedPredicateException(this, "precpred(_ctx, 11)");
 						setState(115);
 						((ModuloExpressionContext)_localctx).op = match(T__17);
 						setState(116);
-						expression(11);
+						expression(12);
 						}
 						break;
 					case 3:
@@ -1114,11 +1139,11 @@ public class LanguageParser extends Parser {
 						_localctx = new ConcatExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(117);
-						if (!(precpred(_ctx, 9))) throw new FailedPredicateException(this, "precpred(_ctx, 9)");
+						if (!(precpred(_ctx, 10))) throw new FailedPredicateException(this, "precpred(_ctx, 10)");
 						setState(118);
 						((ConcatExpressionContext)_localctx).op = match(T__18);
 						setState(119);
-						expression(10);
+						expression(11);
 						}
 						break;
 					case 4:
@@ -1126,7 +1151,7 @@ public class LanguageParser extends Parser {
 						_localctx = new RelationExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(120);
-						if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
+						if (!(precpred(_ctx, 9))) throw new FailedPredicateException(this, "precpred(_ctx, 9)");
 						setState(121);
 						((RelationExpressionContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
@@ -1139,7 +1164,7 @@ public class LanguageParser extends Parser {
 							consume();
 						}
 						setState(122);
-						expression(9);
+						expression(10);
 						}
 						break;
 					case 5:
@@ -1147,7 +1172,7 @@ public class LanguageParser extends Parser {
 						_localctx = new ComparisonExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(123);
-						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
+						if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
 						setState(124);
 						((ComparisonExpressionContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
@@ -1160,7 +1185,7 @@ public class LanguageParser extends Parser {
 							consume();
 						}
 						setState(125);
-						expression(8);
+						expression(9);
 						}
 						break;
 					case 6:
@@ -1168,7 +1193,7 @@ public class LanguageParser extends Parser {
 						_localctx = new LogicExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(126);
-						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
+						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
 						setState(127);
 						((LogicExpressionContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
@@ -1181,13 +1206,29 @@ public class LanguageParser extends Parser {
 							consume();
 						}
 						setState(128);
+						expression(8);
+						}
+						break;
+					case 7:
+						{
+						_localctx = new TernaryExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(129);
+						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
+						setState(130);
+						match(T__25);
+						setState(131);
+						expression(0);
+						setState(132);
+						((TernaryExpressionContext)_localctx).split = match(T__26);
+						setState(133);
 						expression(7);
 						}
 						break;
 					}
 					} 
 				}
-				setState(133);
+				setState(139);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,9,_ctx);
 			}
@@ -1236,9 +1277,9 @@ public class LanguageParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(134);
+			setState(140);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 4026531840L) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 16106127360L) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -1269,23 +1310,25 @@ public class LanguageParser extends Parser {
 	private boolean expression_sempred(ExpressionContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 0:
-			return precpred(_ctx, 11);
+			return precpred(_ctx, 12);
 		case 1:
-			return precpred(_ctx, 10);
+			return precpred(_ctx, 11);
 		case 2:
-			return precpred(_ctx, 9);
+			return precpred(_ctx, 10);
 		case 3:
-			return precpred(_ctx, 8);
+			return precpred(_ctx, 9);
 		case 4:
-			return precpred(_ctx, 7);
+			return precpred(_ctx, 8);
 		case 5:
+			return precpred(_ctx, 7);
+		case 6:
 			return precpred(_ctx, 6);
 		}
 		return true;
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001#\u0089\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0004\u0001%\u008f\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
 		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0001"+
 		"\u0000\u0004\u0000\f\b\u0000\u000b\u0000\f\u0000\r\u0001\u0001\u0001\u0001"+
 		"\u0001\u0001\u0001\u0001\u0001\u0001\u0005\u0001\u0015\b\u0001\n\u0001"+
@@ -1306,24 +1349,25 @@ public class LanguageParser extends Parser {
 		"n\b\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003"+
 		"\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003"+
 		"\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003"+
-		"\u0001\u0003\u0005\u0003\u0082\b\u0003\n\u0003\f\u0003\u0085\t\u0003\u0001"+
+		"\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003"+
+		"\u0001\u0003\u0005\u0003\u0088\b\u0003\n\u0003\f\u0003\u008b\t\u0003\u0001"+
 		"\u0004\u0001\u0004\u0001\u0004\u0000\u0001\u0006\u0005\u0000\u0002\u0004"+
 		"\u0006\b\u0000\u0005\u0001\u0000\u000e\u0011\u0001\u0000\u0014\u0015\u0001"+
-		"\u0000\u0016\u0017\u0001\u0000\u0018\u0019\u0001\u0000\u001c\u001f\u009d"+
-		"\u0000\u000b\u0001\u0000\u0000\u0000\u0002[\u0001\u0000\u0000\u0000\u0004"+
-		"]\u0001\u0000\u0000\u0000\u0006m\u0001\u0000\u0000\u0000\b\u0086\u0001"+
-		"\u0000\u0000\u0000\n\f\u0003\u0002\u0001\u0000\u000b\n\u0001\u0000\u0000"+
-		"\u0000\f\r\u0001\u0000\u0000\u0000\r\u000b\u0001\u0000\u0000\u0000\r\u000e"+
-		"\u0001\u0000\u0000\u0000\u000e\u0001\u0001\u0000\u0000\u0000\u000f\\\u0005"+
-		"\u0001\u0000\u0000\u0010\u0011\u0005 \u0000\u0000\u0011\u0016\u0005!\u0000"+
-		"\u0000\u0012\u0013\u0005\u0002\u0000\u0000\u0013\u0015\u0005!\u0000\u0000"+
+		"\u0000\u0016\u0017\u0001\u0000\u0018\u0019\u0001\u0000\u001e!\u00a4\u0000"+
+		"\u000b\u0001\u0000\u0000\u0000\u0002[\u0001\u0000\u0000\u0000\u0004]\u0001"+
+		"\u0000\u0000\u0000\u0006m\u0001\u0000\u0000\u0000\b\u008c\u0001\u0000"+
+		"\u0000\u0000\n\f\u0003\u0002\u0001\u0000\u000b\n\u0001\u0000\u0000\u0000"+
+		"\f\r\u0001\u0000\u0000\u0000\r\u000b\u0001\u0000\u0000\u0000\r\u000e\u0001"+
+		"\u0000\u0000\u0000\u000e\u0001\u0001\u0000\u0000\u0000\u000f\\\u0005\u0001"+
+		"\u0000\u0000\u0010\u0011\u0005\"\u0000\u0000\u0011\u0016\u0005#\u0000"+
+		"\u0000\u0012\u0013\u0005\u0002\u0000\u0000\u0013\u0015\u0005#\u0000\u0000"+
 		"\u0014\u0012\u0001\u0000\u0000\u0000\u0015\u0018\u0001\u0000\u0000\u0000"+
 		"\u0016\u0014\u0001\u0000\u0000\u0000\u0016\u0017\u0001\u0000\u0000\u0000"+
 		"\u0017\u0019\u0001\u0000\u0000\u0000\u0018\u0016\u0001\u0000\u0000\u0000"+
 		"\u0019\\\u0005\u0001\u0000\u0000\u001a\u001b\u0003\u0006\u0003\u0000\u001b"+
 		"\u001c\u0005\u0001\u0000\u0000\u001c\\\u0001\u0000\u0000\u0000\u001d\u001e"+
-		"\u0005\u0003\u0000\u0000\u001e#\u0005!\u0000\u0000\u001f \u0005\u0002"+
-		"\u0000\u0000 \"\u0005!\u0000\u0000!\u001f\u0001\u0000\u0000\u0000\"%\u0001"+
+		"\u0005\u0003\u0000\u0000\u001e#\u0005#\u0000\u0000\u001f \u0005\u0002"+
+		"\u0000\u0000 \"\u0005#\u0000\u0000!\u001f\u0001\u0000\u0000\u0000\"%\u0001"+
 		"\u0000\u0000\u0000#!\u0001\u0000\u0000\u0000#$\u0001\u0000\u0000\u0000"+
 		"$&\u0001\u0000\u0000\u0000%#\u0001\u0000\u0000\u0000&\\\u0005\u0001\u0000"+
 		"\u0000\'(\u0005\u0004\u0000\u0000(-\u0003\u0006\u0003\u0000)*\u0005\u0002"+
@@ -1352,26 +1396,29 @@ public class LanguageParser extends Parser {
 		"[Q\u0001\u0000\u0000\u0000\\\u0003\u0001\u0000\u0000\u0000]^\u0003\u0006"+
 		"\u0003\u0000^\u0005\u0001\u0000\u0000\u0000_`\u0006\u0003\uffff\uffff"+
 		"\u0000`a\u0005\b\u0000\u0000ab\u0003\u0006\u0003\u0000bc\u0005\t\u0000"+
-		"\u0000cn\u0001\u0000\u0000\u0000de\u0005\u001a\u0000\u0000en\u0003\u0006"+
+		"\u0000cn\u0001\u0000\u0000\u0000de\u0005\u001c\u0000\u0000en\u0003\u0006"+
 		"\u0003\u0005fg\u0005\u000f\u0000\u0000gn\u0003\u0006\u0003\u0004hn\u0005"+
-		"!\u0000\u0000in\u0003\b\u0004\u0000jk\u0005!\u0000\u0000kl\u0005\u001b"+
+		"#\u0000\u0000in\u0003\b\u0004\u0000jk\u0005#\u0000\u0000kl\u0005\u001d"+
 		"\u0000\u0000ln\u0003\u0006\u0003\u0001m_\u0001\u0000\u0000\u0000md\u0001"+
 		"\u0000\u0000\u0000mf\u0001\u0000\u0000\u0000mh\u0001\u0000\u0000\u0000"+
-		"mi\u0001\u0000\u0000\u0000mj\u0001\u0000\u0000\u0000n\u0083\u0001\u0000"+
-		"\u0000\u0000op\n\u000b\u0000\u0000pq\u0007\u0000\u0000\u0000q\u0082\u0003"+
-		"\u0006\u0003\frs\n\n\u0000\u0000st\u0005\u0012\u0000\u0000t\u0082\u0003"+
-		"\u0006\u0003\u000buv\n\t\u0000\u0000vw\u0005\u0013\u0000\u0000w\u0082"+
-		"\u0003\u0006\u0003\nxy\n\b\u0000\u0000yz\u0007\u0001\u0000\u0000z\u0082"+
-		"\u0003\u0006\u0003\t{|\n\u0007\u0000\u0000|}\u0007\u0002\u0000\u0000}"+
-		"\u0082\u0003\u0006\u0003\b~\u007f\n\u0006\u0000\u0000\u007f\u0080\u0007"+
-		"\u0003\u0000\u0000\u0080\u0082\u0003\u0006\u0003\u0007\u0081o\u0001\u0000"+
-		"\u0000\u0000\u0081r\u0001\u0000\u0000\u0000\u0081u\u0001\u0000\u0000\u0000"+
-		"\u0081x\u0001\u0000\u0000\u0000\u0081{\u0001\u0000\u0000\u0000\u0081~"+
-		"\u0001\u0000\u0000\u0000\u0082\u0085\u0001\u0000\u0000\u0000\u0083\u0081"+
-		"\u0001\u0000\u0000\u0000\u0083\u0084\u0001\u0000\u0000\u0000\u0084\u0007"+
-		"\u0001\u0000\u0000\u0000\u0085\u0083\u0001\u0000\u0000\u0000\u0086\u0087"+
-		"\u0007\u0004\u0000\u0000\u0087\t\u0001\u0000\u0000\u0000\n\r\u0016#-6"+
-		"A[m\u0081\u0083";
+		"mi\u0001\u0000\u0000\u0000mj\u0001\u0000\u0000\u0000n\u0089\u0001\u0000"+
+		"\u0000\u0000op\n\f\u0000\u0000pq\u0007\u0000\u0000\u0000q\u0088\u0003"+
+		"\u0006\u0003\rrs\n\u000b\u0000\u0000st\u0005\u0012\u0000\u0000t\u0088"+
+		"\u0003\u0006\u0003\fuv\n\n\u0000\u0000vw\u0005\u0013\u0000\u0000w\u0088"+
+		"\u0003\u0006\u0003\u000bxy\n\t\u0000\u0000yz\u0007\u0001\u0000\u0000z"+
+		"\u0088\u0003\u0006\u0003\n{|\n\b\u0000\u0000|}\u0007\u0002\u0000\u0000"+
+		"}\u0088\u0003\u0006\u0003\t~\u007f\n\u0007\u0000\u0000\u007f\u0080\u0007"+
+		"\u0003\u0000\u0000\u0080\u0088\u0003\u0006\u0003\b\u0081\u0082\n\u0006"+
+		"\u0000\u0000\u0082\u0083\u0005\u001a\u0000\u0000\u0083\u0084\u0003\u0006"+
+		"\u0003\u0000\u0084\u0085\u0005\u001b\u0000\u0000\u0085\u0086\u0003\u0006"+
+		"\u0003\u0007\u0086\u0088\u0001\u0000\u0000\u0000\u0087o\u0001\u0000\u0000"+
+		"\u0000\u0087r\u0001\u0000\u0000\u0000\u0087u\u0001\u0000\u0000\u0000\u0087"+
+		"x\u0001\u0000\u0000\u0000\u0087{\u0001\u0000\u0000\u0000\u0087~\u0001"+
+		"\u0000\u0000\u0000\u0087\u0081\u0001\u0000\u0000\u0000\u0088\u008b\u0001"+
+		"\u0000\u0000\u0000\u0089\u0087\u0001\u0000\u0000\u0000\u0089\u008a\u0001"+
+		"\u0000\u0000\u0000\u008a\u0007\u0001\u0000\u0000\u0000\u008b\u0089\u0001"+
+		"\u0000\u0000\u0000\u008c\u008d\u0007\u0004\u0000\u0000\u008d\t\u0001\u0000"+
+		"\u0000\u0000\n\r\u0016#-6A[m\u0087\u0089";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

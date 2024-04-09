@@ -29,6 +29,7 @@ expression                                                                      
     | expression op=('<' | '>') expression                # relationExpression   // ✅           ✅
     | expression op=('==' | '!=') expression              # comparisonExpression // ✅           ✅
     | expression op=('&&' | '||') expression              # logicExpression      // ✅           ✅
+    | expression '?' expression split=':' expression      # ternaryExpression    // ✅           ✅
     | op='!' expression                                   # notExpression        // ✅           ✅
     | op='-' expression                                   # negExpression        // ✅           ✅
     | VAR                                                 # varExpression        // ✅           ✅

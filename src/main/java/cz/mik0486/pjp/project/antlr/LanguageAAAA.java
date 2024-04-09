@@ -35,10 +35,10 @@ public class LanguageAAAA extends LanguageBaseListener implements LanguageListen
 
         String type = code.get(ctx.TYPE());
 
-        for (TerminalNode var : ctx.VAR()) {
-            sb.append(type);
-            sb.append(STR . "save \{ var.getText() } \n");
-        }
+//        for (TerminalNode var : ctx.VAR()) {
+//            sb.append(type);
+//            sb.append(STR . "save \{ var.getText() } \n");
+//        }
 
         code.put(ctx, sb.toString());
     }
@@ -55,13 +55,13 @@ public class LanguageAAAA extends LanguageBaseListener implements LanguageListen
             count++;
         }
 
-        sb.append(STR . "print \{ count }");
+//        sb.append(STR . "print \{ count }");
         code.put(ctx, sb.append("\n").toString());
     }
 
     @Override
     public void exitVarExpression(LanguageParser.VarExpressionContext ctx) {
-        code.put(ctx, STR . "load \{ ctx.VAR().getText() } \n");
+//        code.put(ctx, STR . "load \{ ctx.VAR().getText() } \n");
         values.put(ctx, symbolTable.get(ctx.VAR().getText()));
     }
 
@@ -70,25 +70,25 @@ public class LanguageAAAA extends LanguageBaseListener implements LanguageListen
         if (ctx.literal().INT() != null) {
             int value = Integer.parseInt(ctx.literal().INT().getText());
             values.put(ctx, new Pair<>(Type.INT, value));
-            code.put(ctx, STR . "push I \{ value } \n");
+//            code.put(ctx, STR . "push I \{ value } \n");
         }
 
         if (ctx.literal().FLOAT() != null) {
             float value = Float.parseFloat(ctx.literal().FLOAT().getText());
             values.put(ctx, new Pair<>(Type.FLOAT, value));
-            code.put(ctx, STR . "push F \{ value } \n");
+//            code.put(ctx, STR . "push F \{ value } \n");
         }
 
         if (ctx.literal().BOOL() != null) {
             boolean value = Boolean.parseBoolean(ctx.literal().BOOL().getText());
             values.put(ctx, new Pair<>(Type.BOOL, value));
-            code.put(ctx, STR . "push B \{ value ? "true" : "false" } \n");
+//            code.put(ctx, STR . "push B \{ value ? "true" : "false" } \n");
         }
 
         if (ctx.literal().STRING() != null) {
             String value = ctx.literal().STRING().getText();
             values.put(ctx, new Pair<>(Type.STRING, value));
-            code.put(ctx, STR . "push S \{ value } \n");
+//            code.put(ctx, STR . "push S \{ value } \n");
         }
     }
 

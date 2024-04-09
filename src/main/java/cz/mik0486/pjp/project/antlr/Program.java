@@ -44,11 +44,11 @@ public class Program {
     public boolean init() {
         long startTime = System.currentTimeMillis();
 
-        log.info(STR . "Initializing program \"\{ programName }\"");
+        log.info("Initializing program \"%s\"".formatted(programName));
         CharStream input = null;
 
         if (inputFilePath != null) {
-            log.debug(STR . " - Loading input file src/main/antlr4/\{ inputFilePath }");
+            log.debug(" - Loading input file src/main/antlr4/%s".formatted(inputFilePath));
 
             File inputFile = new File("src/main/antlr4", inputFilePath);
             if (!inputFile.exists()) {
@@ -64,21 +64,24 @@ public class Program {
                     System.exit(1);
                 }
             } catch (Exception e) {
-                log.error(STR . "    - Error while loading input file: \{ e.getMessage() }");
+                log.error("    - Error while loading input file: %s".formatted(e.getMessage()));
                 return false;
             }
         } else {
             log.debug(" - Using text input");
-            StringBuilder sb = new StringBuilder();
 
-            int i = 1;
+            StringBuilder sb = new StringBuilder();
+            int lineNum = 1;
+
             for (String line : inputText.split("\n")) {
-                sb.append(line.trim()).append("\n");
-                log.debug(STR . " | \{ i } | \{ line.trim() }");
-                i++;
+                line = line.strip();
+                sb.append(line).append("\n");
+
+                log.trace(" | %d | %s".formatted(lineNum++, line));
             }
 
-            input = CharStreams.fromString(sb.toString());
+            inputText = sb.toString();
+            input = CharStreams.fromString(inputText);
         }
 
         lexer = new LanguageLexer(input);
@@ -102,12 +105,11 @@ public class Program {
         if (ErrorLogger.hasErrors()) {
             log.error(" - Type errors found!");
             ErrorLogger.printErrors();
-
-            log.info("Program initialization failed. Took %d ms".formatted(System.currentTimeMillis() - startTime));
             return false;
         }
 
-        log.info("Program initialized successfully. Took %d ms".formatted(System.currentTimeMillis() - startTime));
+        long endTime = System.currentTimeMillis();
+        log.info("Program initialized in %d ms".formatted(endTime - startTime));
         return true;
     }
 

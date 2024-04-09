@@ -186,30 +186,6 @@ public interface LanguageListener extends ParseTreeListener {
 	 */
 	void exitAssignExpression(LanguageParser.AssignExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code aritmExpression}
-	 * labeled alternative in {@link LanguageParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterAritmExpression(LanguageParser.AritmExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code aritmExpression}
-	 * labeled alternative in {@link LanguageParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitAritmExpression(LanguageParser.AritmExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code logicExpression}
-	 * labeled alternative in {@link LanguageParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterLogicExpression(LanguageParser.LogicExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code logicExpression}
-	 * labeled alternative in {@link LanguageParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitLogicExpression(LanguageParser.LogicExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code notExpression}
 	 * labeled alternative in {@link LanguageParser#expression}.
 	 * @param ctx the parse tree
@@ -258,6 +234,42 @@ public interface LanguageListener extends ParseTreeListener {
 	 */
 	void exitParenExpression(LanguageParser.ParenExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code concatExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterConcatExpression(LanguageParser.ConcatExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code concatExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitConcatExpression(LanguageParser.ConcatExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code aritmExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAritmExpression(LanguageParser.AritmExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code aritmExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAritmExpression(LanguageParser.AritmExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code logicExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterLogicExpression(LanguageParser.LogicExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code logicExpression}
+	 * labeled alternative in {@link LanguageParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitLogicExpression(LanguageParser.LogicExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code negExpression}
 	 * labeled alternative in {@link LanguageParser#expression}.
 	 * @param ctx the parse tree
@@ -282,17 +294,17 @@ public interface LanguageListener extends ParseTreeListener {
 	 */
 	void exitLiteralExpression(LanguageParser.LiteralExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code concatExpression}
+	 * Enter a parse tree produced by the {@code ternaryExpression}
 	 * labeled alternative in {@link LanguageParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterConcatExpression(LanguageParser.ConcatExpressionContext ctx);
+	void enterTernaryExpression(LanguageParser.TernaryExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code concatExpression}
+	 * Exit a parse tree produced by the {@code ternaryExpression}
 	 * labeled alternative in {@link LanguageParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitConcatExpression(LanguageParser.ConcatExpressionContext ctx);
+	void exitTernaryExpression(LanguageParser.TernaryExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link LanguageParser#literal}.
 	 * @param ctx the parse tree

@@ -1,11 +1,2 @@
-warite "<Constants>";
+write "<Variables>";
 string s;
-s="Abcd";
-write "s(Abcd): ", s;
-
-int a;
-
-while(a) {
- write "a=",a;
- a=a+1;
-}

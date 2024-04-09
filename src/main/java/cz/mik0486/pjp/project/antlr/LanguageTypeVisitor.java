@@ -16,6 +16,27 @@ public class LanguageTypeVisitor extends LanguageBaseVisitor<Type> implements La
     private final Map<String, Type> symbolTable = new HashMap<>();
 
     @Override
+    public Type visitTernaryExpression(LanguageParser.TernaryExpressionContext ctx) {
+        Type conditionType = visit(ctx.expression(0));
+        Type trueType = visit(ctx.expression(1));
+        Type falseType = visit(ctx.expression(2));
+
+        if (conditionType != Type.BOOL) {
+            ErrorLogger.addError(ctx, ctx.expression(0).getStart(), "Condition must be of type BOOL, got %s", conditionType);
+        }
+
+        if (trueType == Type.INT && falseType == Type.FLOAT) {
+            return Type.FLOAT;
+        }
+
+        if (trueType != falseType) {
+            ErrorLogger.addError(ctx, ctx.split, "Incompatible types %s and %s", trueType, falseType);
+        }
+
+        return trueType;
+    }
+
+    @Override
     public Type visitVarDeclStatement(LanguageParser.VarDeclStatementContext ctx) {
         Type type = Type.valueOf(ctx.TYPE().getText().toUpperCase());
         boolean errored = false;
@@ -192,5 +213,10 @@ public class LanguageTypeVisitor extends LanguageBaseVisitor<Type> implements La
         }
 
         return varType;
+    }
+
+    @Override
+    public Type visitParenExpression(LanguageParser.ParenExpressionContext ctx) {
+        return visit(ctx.expression());
     }
 }
