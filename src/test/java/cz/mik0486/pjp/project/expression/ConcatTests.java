@@ -1,50 +1,60 @@
 package cz.mik0486.pjp.project.expression;
 
 import cz.mik0486.pjp.project.TestClass;
+import cz.mik0486.pjp.project.antlr.StringUtils;
 import org.junit.jupiter.api.Test;
+
+import java.util.Scanner;
 
 public class ConcatTests extends TestClass {
 
     @Test
     public void testConcatenation() {
-        String input = """
-            "string" . "string";
+        String code = """
+            write "string" . "string";
         """;
 
         String compiled = """
             push S "string"
             push S "string"
             concat
-            pop
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            stringstring
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testConcatenationInt() {
-        String input = """
+        String code = """
             1 . 2;
         """;
 
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(code, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testConcatenationFloat() {
-        String input = """
+        String code = """
             1.0 . 2.0;
         """;
 
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(code, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testConcatenationBool() {
-        String input = """
+        String code = """
             true . false;
         """;
 
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(code, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }

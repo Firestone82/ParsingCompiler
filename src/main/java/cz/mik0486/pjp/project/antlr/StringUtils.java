@@ -11,7 +11,9 @@ import java.util.stream.Collectors;
 public class StringUtils {
 
     public static String stripSpaces(String input) {
-        return Arrays.stream(input.split("\n")).map(String::strip).collect(Collectors.joining("\n"));
+        return Arrays.stream(input.split("\n"))
+                .map(String::strip)
+                .collect(Collectors.joining("\n"));
     }
 
     public static String readFile(File file) {

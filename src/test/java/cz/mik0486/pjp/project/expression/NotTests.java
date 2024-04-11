@@ -1,60 +1,70 @@
 package cz.mik0486.pjp.project.expression;
 
 import cz.mik0486.pjp.project.TestClass;
+import cz.mik0486.pjp.project.antlr.StringUtils;
 import org.junit.jupiter.api.Test;
+
+import java.util.Scanner;
 
 public class NotTests extends TestClass {
 
     @Test
     public void testLogicNot() {
-        String input = """
-            !false;
+        String code = """
+            write !false;
         """;
 
         String compiled = """
             push B false
             not
-            pop
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            true
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testLogicNotInt() {
-        String input = """
+        String code = """
             int a;
             !a;
         """;
 
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(code, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testLogicNotFloat() {
-        String input = """
+        String code = """
             float a;
             !a;
         """;
 
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(code, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testLogicNotString() {
-        String input = """
+        String code = """
             string a;
             !a;
         """;
 
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(code, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testLogicNotBool() {
-        String input = """
+        String code = """
             bool a;
-            !a;
+            write !a;
         """;
 
         String compiled = """
@@ -62,9 +72,16 @@ public class NotTests extends TestClass {
             save a
             load a
             not
-            pop
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            true
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }

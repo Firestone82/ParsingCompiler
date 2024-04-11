@@ -14,32 +14,34 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Scanner;
 
 @Data
 @Slf4j
 public class Program {
 
     private final String programName;
+    private LanguageParser.ProgramContext context;
+
     private final String inputFilePath;
     private String inputText;
+    private Scanner inputData;
 
-    private LanguageLexer lexer;
-    private CommonTokenStream tokens;
-    private LanguageParser parser;
-
-    private LanguageParser.ProgramContext context;
     private List<String> compiledCodeLines;
+    private List<String> outputLines;
 
-    public Program(String programName, String inputText) {
+    public Program(String programName, String inputText, Scanner inputData) {
         this.programName = programName;
         this.inputText = inputText;
         this.inputFilePath = null;
+        this.inputData = inputData;
     }
 
-    public Program(String programName, Path fileInputPath) {
+    public Program(String programName, Path fileInputPath, Scanner inputData) {
         this.programName = programName;
         this.inputText = null;
         this.inputFilePath = fileInputPath.toString();
+        this.inputData = inputData;
     }
 
     public boolean init() {
@@ -87,9 +89,9 @@ public class Program {
             input = CharStreams.fromString(inputText);
         }
 
-        lexer = new LanguageLexer(input);
-        tokens = new CommonTokenStream(lexer);
-        parser = new LanguageParser(tokens);
+        LanguageLexer lexer = new LanguageLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        LanguageParser parser = new LanguageParser(tokens);
         parser.removeErrorListeners();
         parser.addErrorListener(new ErrorListener());
 
@@ -130,14 +132,14 @@ public class Program {
         long startTime = System.currentTimeMillis();
         log.debug(" - Compiling program");
 
-        LanguageProcessor languageProcessor = new LanguageProcessor();
-        new ParseTreeWalker().walk(languageProcessor, context);
-        compiledCodeLines = languageProcessor.getCompiledCodeLines();
+        LanguageCompiler languageCompiler = new LanguageCompiler();
+        new ParseTreeWalker().walk(languageCompiler, context);
+        compiledCodeLines = languageCompiler.getCompiledCodeLines();
 
         int totalLines = String.valueOf(compiledCodeLines.size()).length();
         int lineNum = 1;
 
-        for (String line : languageProcessor.getCompiledCodeLines()) {
+        for (String line : languageCompiler.getCompiledCodeLines()) {
             String lineNumStr = " ".repeat(totalLines - String.valueOf(lineNum).length()) + lineNum;
             lineNum++;
 
@@ -154,11 +156,51 @@ public class Program {
         return true;
     }
 
+    public boolean process() {
+        long startTime = System.currentTimeMillis();
+        log.debug(" - Processing program");
+
+        LanguageProcessor languageProcessor = new LanguageProcessor(inputData);
+        languageProcessor.process(compiledCodeLines);
+        outputLines = languageProcessor.getProcessedLines();
+
+        int totalLines = String.valueOf(outputLines.size()).length();
+        int lineNum = 1;
+
+        for (String line : languageProcessor.getProcessedLines()) {
+            String lineNumStr = " ".repeat(totalLines - String.valueOf(lineNum).length()) + lineNum;
+            lineNum++;
+
+            log.trace((STR . " | \{ lineNumStr } | \{ line }"));
+        }
+
+        if (outputLines.isEmpty()) {
+            log.trace(" - No output generated!");
+        }
+
+        if (ErrorLogger.hasErrors()) {
+            log.error(" - Evaluation errors found!");
+            ErrorLogger.printErrors();
+            return false;
+        }
+
+        log.info("Program processed in %d ms".formatted(System.currentTimeMillis() - startTime));
+        return true;
+    }
+
     public String getCompiledCode() {
         if (compiledCodeLines == null) {
             return null;
         }
 
         return String.join("\n", compiledCodeLines);
+    }
+
+    public String getOutput() {
+        if (outputLines == null) {
+            return null;
+        }
+
+        return String.join("\n", outputLines);
     }
 }

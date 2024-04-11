@@ -1,15 +1,19 @@
 package cz.mik0486.pjp.project.statement;
 
 import cz.mik0486.pjp.project.TestClass;
+import cz.mik0486.pjp.project.antlr.StringUtils;
 import org.junit.jupiter.api.Test;
+
+import java.util.Scanner;
 
 public class ReadTests extends TestClass {
 
     @Test
     public void testReadInt() {
-        String input = """
+        String code = """
             int a;
             read a;
+            write a;
         """;
 
         String compiled = """
@@ -17,16 +21,27 @@ public class ReadTests extends TestClass {
             save a
             read I
             save a
+            load a
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+            5
+        """;
+
+        String output = """
+            5
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testReadFloat() {
-        String input = """
+        String code = """
             float a;
             read a;
+            write a;
         """;
 
         String compiled = """
@@ -34,16 +49,27 @@ public class ReadTests extends TestClass {
             save a
             read F
             save a
+            load a
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """       
+            5.5
+        """;
+
+        String output = """
+            5.5
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testReadString() {
-        String input = """
+        String code = """
             string a;
             read a;
+            write a;
         """;
 
         String compiled = """
@@ -51,16 +77,27 @@ public class ReadTests extends TestClass {
             save a
             read S
             save a
+            load a
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """       
+            Hello World
+        """;
+
+        String output = """
+            Hello World
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testReadBool() {
-        String input = """
+        String code = """
             bool a;
             read a;
+            write a;
         """;
 
         String compiled = """
@@ -68,14 +105,24 @@ public class ReadTests extends TestClass {
             save a
             read B
             save a
+            load a
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """      
+            true
+        """;
+
+        String output = """
+            true
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testReadMultipleVariables() {
-        String input = """
+        String code = """
             int a;
             float b;
             string c;
@@ -102,15 +149,25 @@ public class ReadTests extends TestClass {
             save d
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+            5
+            5.5
+            string
+            true
+        """;
+
+        String output = """
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testReadNoDeclaration() {
-        String input = """
+        String code = """
             read a;
         """;
 
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(code, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }

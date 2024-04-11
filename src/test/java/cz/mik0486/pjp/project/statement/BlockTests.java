@@ -1,13 +1,16 @@
 package cz.mik0486.pjp.project.statement;
 
 import cz.mik0486.pjp.project.TestClass;
+import cz.mik0486.pjp.project.antlr.StringUtils;
 import org.junit.jupiter.api.Test;
+
+import java.util.Scanner;
 
 public class BlockTests extends TestClass {
 
     @Test
     public void testEmptyBlock() {
-        String input = """
+        String code = """
             {
             }
         """;
@@ -15,12 +18,18 @@ public class BlockTests extends TestClass {
         String compiled = """
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testBlockWithOneStatement() {
-        String input = """
+        String code = """
             {
                 int a;
             }
@@ -31,12 +40,18 @@ public class BlockTests extends TestClass {
             save a
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testBlockWithMultipleStatements() {
-        String input = """
+        String code = """
             {
                 int a;
                 float b;
@@ -56,6 +71,12 @@ public class BlockTests extends TestClass {
             save d
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }

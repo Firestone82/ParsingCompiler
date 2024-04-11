@@ -1,15 +1,19 @@
 package cz.mik0486.pjp.project.expression;
 
 import cz.mik0486.pjp.project.TestClass;
+import cz.mik0486.pjp.project.antlr.StringUtils;
 import org.junit.jupiter.api.Test;
+
+import java.util.Scanner;
 
 public class AssignmentTests extends TestClass {
 
     @Test
     public void testAssignInt() {
-        String input = """
+        String code = """
             int a;
             a = 5;
+            write a;
         """;
 
         String compiled = """
@@ -19,16 +23,26 @@ public class AssignmentTests extends TestClass {
             save a
             load a
             pop
+            load a
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            5
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testAssignFloat() {
-        String input = """
+        String code = """
             float a;
             a = 5.0;
+            write a;
         """;
 
         String compiled = """
@@ -38,16 +52,26 @@ public class AssignmentTests extends TestClass {
             save a
             load a
             pop
+            load a
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            5.0
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testAssignString() {
-        String input = """
+        String code = """
             string a;
             a = "hello";
+            write a;
         """;
 
         String compiled = """
@@ -57,16 +81,26 @@ public class AssignmentTests extends TestClass {
             save a
             load a
             pop
+            load a
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            hello
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testAssignBool() {
-        String input = """
+        String code = """
             bool a;
             a = true;
+            write a;
         """;
 
         String compiled = """
@@ -76,14 +110,23 @@ public class AssignmentTests extends TestClass {
             save a
             load a
             pop
+            load a
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            true
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testAssignMixed() {
-        String input = """
+        String code = """
             int a;
             a = 0.9;
             
@@ -91,15 +134,15 @@ public class AssignmentTests extends TestClass {
             b = 5;
         """;
 
-
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(code, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testAssignIntToFloat() {
-        String input = """
+        String code = """
             float a;
             a = 5;
+            write a;
         """;
 
         String compiled = """
@@ -110,8 +153,17 @@ public class AssignmentTests extends TestClass {
             save a
             load a
             pop
+            load a
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            5.0
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }

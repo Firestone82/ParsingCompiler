@@ -4,11 +4,13 @@ import cz.mik0486.pjp.project.TestClass;
 import cz.mik0486.pjp.project.antlr.StringUtils;
 import org.junit.jupiter.api.Test;
 
+import java.util.Scanner;
+
 public class IfTests extends TestClass {
 
     @Test
     public void testIf() {
-        String input = """
+        String code = """
             if (true) {
                 int a;
             }
@@ -22,12 +24,18 @@ public class IfTests extends TestClass {
             label L1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testIfWrite() {
-        String input = """
+        String code = """
             if (3<4) write "condition was true";
             else write "condition was false";
         """;
@@ -46,102 +54,140 @@ public class IfTests extends TestClass {
             label L1
         """;
 
-        processSuccess(StringUtils.stripSpaces(input), StringUtils.stripSpaces(compiled), Thread.currentThread().getStackTrace()[1].getMethodName());
+
+        String input = """        
+        """;
+
+        String output = """
+            condition was true
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testIfElse() {
-        String input = """
+        String code = """
             if (true) {
-                int a;
+                write "true";
             } else {
-                float b;
+                write "false";
             }
         """;
 
         String compiled = """
             push B true
             fjmp L0
-            push I 0
-            save a
+            push S "true"
+            print 1
             jmp L1
             label L0
-            push F 0.0
-            save b
+            push S "false"
+            print 1
             label L1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            true
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testIfElseIf() {
-        String input = """
-            if (true) {
-                int a;
+        String code = """
+            bool a;
+            a = true;
+            
+            if (a) {
+                write "true";
             } else if (false) {
-                float b;
+                write "false";
             }
         """;
 
         String compiled = """
-            push B true
-            fjmp L2
-            push I 0
+            push B false
             save a
+            push B true
+            save a
+            load a
+            pop
+            load a
+            fjmp L2
+            push S "true"
+            print 1
             jmp L3
             label L2
             push B false
             fjmp L1
-            push F 0.0
-            save b
+            push S "false"
+            print 1
             label L1
             label L3
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            true
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testIfElseIfElse() {
-        String input = """
-            if (true) {
-                int a;
-            } else if (false) {
-                float b;
+        String code = """
+            if (false) {
+                write "a";
+            } else if (true) {
+                write "b";
             } else {
-                string c;
+                write "c";
             }
         """;
 
         String compiled = """
-            push B true
+            push B false
             fjmp L2
-            push I 0
-            save a
+            push S "a"
+            print 1
             jmp L3
             label L2
-            push B false
+            push B true
             fjmp L0
-            push F 0.0
-            save b
+            push S "b"
+            print 1
             jmp L1
             label L0
-            push S ""
-            save c
+            push S "c"
+            print 1
             label L1
             label L3
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            b
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testIfCondition() {
-        String input = """
+        String code = """
             int a;
             if (a == 5) {
-                int b;
+                write "a is 5";
             }
         """;
 
@@ -152,17 +198,23 @@ public class IfTests extends TestClass {
             push I 5
             eq
             fjmp L1
-            push I 0
-            save b
+            push S "a is 5"
+            print 1
             label L1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testIfElseConditionNoDeclaration() {
-        String input = """
+        String code = """
             if (a == 5) {
                 int b;
             } else {
@@ -170,34 +222,34 @@ public class IfTests extends TestClass {
             }
         """;
 
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(code, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testIfWrongCondition() {
-        String input = """
+        String code = """
             if (a = 5) {
                 int b;
             }
         """;
 
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(code, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testIfNotBooleanCondition() {
-        String input = """
+        String code = """
             if ("ahoj") {
                 int b;
             }
         """;
 
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(code, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testComplexIf() {
-        String input = """
+        String code = """
             int x;
             x = 5;
             if (x > 0 && x < 10) {
@@ -214,6 +266,7 @@ public class IfTests extends TestClass {
             save x
             push I 5
             save x
+            load x
             pop
             load x
             push I 0
@@ -245,6 +298,12 @@ public class IfTests extends TestClass {
             label L3
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }

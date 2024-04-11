@@ -1,13 +1,16 @@
 package cz.mik0486.pjp.project.expression;
 
 import cz.mik0486.pjp.project.TestClass;
+import cz.mik0486.pjp.project.antlr.StringUtils;
 import org.junit.jupiter.api.Test;
+
+import java.util.Scanner;
 
 public class RelationalOperatorsTests extends TestClass {
 
     @Test
     public void testGreater() {
-        String input = """
+        String code = """
             1 > 2;
         """;
 
@@ -18,12 +21,18 @@ public class RelationalOperatorsTests extends TestClass {
             pop
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testLess() {
-        String input = """
+        String code = """
             1 < 2;
         """;
 
@@ -34,12 +43,18 @@ public class RelationalOperatorsTests extends TestClass {
             pop
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testInt() {
-        String input = """
+        String code = """
             int a;
             int b;
             a > b;
@@ -56,12 +71,18 @@ public class RelationalOperatorsTests extends TestClass {
             pop
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testFloat() {
-        String input = """
+        String code = """
             float a;
             float b;
             a > b;
@@ -78,28 +99,34 @@ public class RelationalOperatorsTests extends TestClass {
             pop
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testString() {
-        String input = """
+        String code = """
             string a;
             string b;
             a > b;
         """;
 
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(code, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testBool() {
-        String input = """
+        String code = """
             bool a;
             bool b;
             a > b;
         """;
 
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(code, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }

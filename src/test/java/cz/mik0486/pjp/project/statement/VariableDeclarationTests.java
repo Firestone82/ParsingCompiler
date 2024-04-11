@@ -1,13 +1,16 @@
 package cz.mik0486.pjp.project.statement;
 
 import cz.mik0486.pjp.project.TestClass;
+import cz.mik0486.pjp.project.antlr.StringUtils;
 import org.junit.jupiter.api.Test;
+
+import java.util.Scanner;
 
 public class VariableDeclarationTests extends TestClass {
 
     @Test
     public void testVariableDeclaration() {
-        String input = """
+        String code = """
             int a, b, c;
             bool d;
             float e;
@@ -29,26 +32,32 @@ public class VariableDeclarationTests extends TestClass {
             save chachar
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testDoubleDeclaration() {
-        String input = """
+        String code = """
             int a, b;
             int a;
         """;
 
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(code, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testDoubleDeclarationDifferentTypes() {
-        String input = """
+        String code = """
             int a, b, c;
             bool a;
         """;
 
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(code, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }

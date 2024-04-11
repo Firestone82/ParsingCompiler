@@ -1,105 +1,150 @@
 package cz.mik0486.pjp.project.expression;
 
 import cz.mik0486.pjp.project.TestClass;
+import cz.mik0486.pjp.project.antlr.StringUtils;
 import org.junit.jupiter.api.Test;
+
+import java.util.Scanner;
 
 public class ParenthesisTests extends TestClass {
 
     @Test
     public void testParenthesis() {
-        String input = """
-            (true);
+        String code = """
+            write (true);
         """;
 
         String compiled = """
             push B true
-            pop
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            true
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testParenthesisInt() {
-        String input = """
+        String code = """
             int a;
-            (a);
+            write (a);
         """;
 
         String compiled = """
             push I 0
             save a
             load a
-            pop
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            0
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testParenthesisFloat() {
-        String input = """
+        String code = """
             float a;
-            (a);
+            write (a);
         """;
 
         String compiled = """
             push F 0.0
             save a
             load a
-            pop
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            0.0
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testParenthesisString() {
-        String input = """
+        String code = """
             string a;
-            (a);
+            write (a);
         """;
 
         String compiled = """
             push S ""
             save a
             load a
-            pop
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testParenthesisBool() {
-        String input = """
+        String code = """
             bool a;
-            (a);
+            write (a);
         """;
 
         String compiled = """
             push B false
             save a
             load a
-            pop
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            false
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testParenthesisOperation() {
-        String input = """
-            (true && false);
+        String code = """
+            write (true && false);
         """;
 
         String compiled = """
             push B true
             push B false
             and
-            pop
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            false
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }

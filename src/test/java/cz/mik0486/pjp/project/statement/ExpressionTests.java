@@ -1,13 +1,16 @@
 package cz.mik0486.pjp.project.statement;
 
 import cz.mik0486.pjp.project.TestClass;
+import cz.mik0486.pjp.project.antlr.StringUtils;
 import org.junit.jupiter.api.Test;
+
+import java.util.Scanner;
 
 public class ExpressionTests extends TestClass {
 
     @Test
     public void testExpression() {
-        String input = """
+        String code = """
             1 + 2;
             1 - 2;
             1 * 2;
@@ -92,6 +95,12 @@ public class ExpressionTests extends TestClass {
             pop
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }

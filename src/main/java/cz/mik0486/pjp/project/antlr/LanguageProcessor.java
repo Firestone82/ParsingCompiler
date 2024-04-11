@@ -1,412 +1,246 @@
 package cz.mik0486.pjp.project.antlr;
 
-import cz.mik0486.pjp.project.antlr.error.ErrorLogger;
-import cz.mik0486.pjp.project.antlr.gen.LanguageBaseListener;
-import cz.mik0486.pjp.project.antlr.gen.LanguageListener;
-import cz.mik0486.pjp.project.antlr.gen.LanguageParser;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.antlr.v4.runtime.tree.ParseTreeProperty;
-import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.*;
 
 @Slf4j
-public class LanguageProcessor extends LanguageBaseListener implements LanguageListener {
-    private final Map<String, Type> symbolTable = new HashMap<>();
-    private final ParseTreeProperty<Statement> tree = new ParseTreeProperty<>();
+@RequiredArgsConstructor
+public class LanguageProcessor {
+    private final Stack<Object> stack = new Stack<>();
+    private final Map<String, Object> variables = new HashMap<>();
+    private final Map<String, Integer> labels = new HashMap<>();
+    private final Scanner scanner;
 
     @Getter
-    private List<String> compiledCodeLines = null;
+    private List<String> processedLines = null;
+    private int currentIndex = 0;
 
-    private int labelCounter = 0;
-    public String getNewLabel() {
-        return STR . "L\{ labelCounter++ }";
+    public void process(List<String> instructions) {
+        processedLines = new ArrayList<>();
+
+        // Map labels
+        for (int i = 0; i < instructions.size(); i++) {
+            String instruction = instructions.get(i);
+
+            if (instruction.startsWith("label")) {
+                String[] parts = instruction.split(" ");
+                labels.put(parts[1], i);
+            }
+        }
+
+        while (currentIndex < instructions.size()) {
+            String instruction = instructions.get(currentIndex);
+
+            execInstruction(currentIndex, instruction);
+
+            currentIndex++;
+        }
     }
 
-    @Override
-    public void enterProgram(LanguageParser.ProgramContext ctx) {
-        super.enterProgram(ctx);
-        compiledCodeLines = new ArrayList<>();
-    }
+    private void execInstruction(int lineNum, String instruction) {
+        String[] parts = instruction.split(" ");
 
-    @Override
-    public void exitProgram(LanguageParser.ProgramContext ctx) {
-        try {
-            for (LanguageParser.StatementContext statement : ctx.statement()) {
-                try {
-                    compiledCodeLines.addAll(Arrays.asList(tree.get(statement).getCode().split("\n")));
-                } catch (Exception e) {
-                    compiledCodeLines.add(STR . "Error in statement: \{ statement.getText() }");
-                    ErrorLogger.addError(ctx, statement.getStart(), "Error in statement: %s", statement.getText());
+        switch (parts[0].toUpperCase()) {
+            case "ADD" -> {
+                Object right = stack.pop();
+                Object left = stack.pop();
+
+                if (left instanceof Float || right instanceof Float ) {
+                    stack.push(NumberUtils.parseToFloat(left) + NumberUtils.parseToFloat(right));
+                } else {
+                    stack.push((int) left + (int) right);
                 }
             }
 
-            // Remove empty lines
-            compiledCodeLines.removeIf(String::isBlank);
-        } catch (Exception e) {
-            log.error("Error while compiling code", e);
-            compiledCodeLines = null;
-        }
-    }
+            case "SUB" -> {
+                Object right = stack.pop();
+                Object left = stack.pop();
 
-    @Override
-    public void enterVarDeclStatement(LanguageParser.VarDeclStatementContext ctx) {
-        List<String> instructions = new ArrayList<>();
-
-        Type type = Type.valueOf(ctx.TYPE().getText().toUpperCase());
-        Object defaultValue = switch (type) {
-            case INT -> 0;
-            case FLOAT -> 0.0f;
-            case BOOL -> false;
-            case STRING -> "\"\"";
-            default -> "Unknown type declared!";
-        };
-
-        for (TerminalNode var : ctx.VAR()) {
-            symbolTable.put(var.getText(), type);
-
-            instructions.add(STR . "push \{ type.toString().charAt(0) } \{ defaultValue }");
-            instructions.add(STR . "save \{ var.getText() }");
-        }
-
-        tree.put(ctx, Statement.of(String.join("\n", instructions), type));
-    }
-
-    @Override
-    public void exitModuloExpression(LanguageParser.ModuloExpressionContext ctx) {
-        List<String> instructions = new ArrayList<>();
-
-        instructions.add(tree.get(ctx.expression(0)).getCode());
-        instructions.add(tree.get(ctx.expression(1)).getCode());
-        instructions.add("mod");
-
-        tree.put(ctx, Statement.of(String.join("\n", instructions), Type.INT));
-    }
-
-    @Override
-    public void exitIfStatement(LanguageParser.IfStatementContext ctx) {
-        List<String> instructions = new ArrayList<>();
-
-        String labelStart = getNewLabel();
-        String labelEnd = getNewLabel();
-
-        String condition = tree.get(ctx.condition()).getCode();
-        String positive = tree.get(ctx.statement(0)).getCode();
-        String negative = ctx.statement().size() == 2
-                ? tree.get(ctx.statement(1)).getCode()
-                : "";
-
-        if (negative.isBlank()) {
-            instructions.add(condition);
-            instructions.add(STR . "fjmp \{ labelEnd }");
-            instructions.add(positive);
-            instructions.add(STR . "label \{ labelEnd }");
-        } else {
-            instructions.add(condition);
-            instructions.add(STR . "fjmp \{ labelStart }");
-            instructions.add(positive);
-            instructions.add(STR . "jmp \{ labelEnd }");
-            instructions.add(STR . "label \{ labelStart }");
-            instructions.add(negative);
-            instructions.add(STR . "label \{ labelEnd }");
-        }
-
-        tree.put(ctx, Statement.of(String.join("\n", instructions), Type.VOID));
-    }
-
-    @Override
-    public void exitWhileStatement(LanguageParser.WhileStatementContext ctx) {
-        List<String> instructions = new ArrayList<>();
-
-        String labelStart = getNewLabel();
-        String labelEnd = getNewLabel();
-
-        String condition = tree.get(ctx.condition()).getCode();
-        String statement = tree.get(ctx.statement()).getCode();
-
-        instructions.add(STR . "label \{ labelStart }");
-        instructions.add(condition);
-        instructions.add(STR . "fjmp \{ labelEnd }");
-        instructions.add(statement);
-        instructions.add(STR . "jmp \{ labelStart }");
-        instructions.add(STR . "label \{ labelEnd }");
-
-        tree.put(ctx, Statement.of(String.join("\n", instructions), Type.VOID));
-    }
-
-    @Override
-    public void exitBoolCondition(LanguageParser.BoolConditionContext ctx) {
-        tree.put(ctx, tree.get(ctx.expression()));
-    }
-
-    @Override
-    public void exitAritmExpression(LanguageParser.AritmExpressionContext ctx) {
-        List<String> instructions = new ArrayList<>();
-
-        Statement left = tree.get(ctx.expression(0));
-        Statement right = tree.get(ctx.expression(1));
-
-        instructions.add(left.getCode());
-        if (left.getType() == Type.INT && right.getType() == Type.FLOAT) {
-            instructions.add("itof");
-        }
-
-        instructions.add(right.getCode());
-        if (right.getType() == Type.INT && left.getType() == Type.FLOAT) {
-            instructions.add("itof");
-        }
-
-        instructions.add(switch (ctx.op.getText()) {
-            case "+" -> "add";
-            case "-" -> "sub";
-            case "*" -> "mul";
-            case "/" -> "div";
-            default -> "Unknown operator";
-        });
-
-        tree.put(ctx, Statement.of(String.join("\n", instructions), Type.resultType(left.getType(), right.getType(), ctx.op.getText())));
-    }
-
-    @Override
-    public void exitLogicExpression(LanguageParser.LogicExpressionContext ctx) {
-        List<String> instructions = new ArrayList<>();
-
-        Statement left = tree.get(ctx.expression(0));
-        Statement right = tree.get(ctx.expression(1));
-
-        instructions.add(left.getCode());
-        instructions.add(right.getCode());
-        instructions.add(ctx.op.getText().equalsIgnoreCase("&&")
-                ? "and"
-                : "or"
-        );
-
-        tree.put(ctx, Statement.of(String.join("\n", instructions), Type.BOOL));
-    }
-
-    @Override
-    public void exitParenExpression(LanguageParser.ParenExpressionContext ctx) {
-        tree.put(ctx, tree.get(ctx.expression()));
-    }
-
-    @Override
-    public void exitBlockStatement(LanguageParser.BlockStatementContext ctx) {
-        List<String> instructions = new ArrayList<>();
-
-        for (LanguageParser.StatementContext statement : ctx.statement()) {
-            instructions.add(tree.get(statement).getCode());
-        }
-
-        tree.put(ctx, Statement.of(String.join("\n", instructions), Type.VOID));
-    }
-
-    @Override
-    public void exitWriteStatement(LanguageParser.WriteStatementContext ctx) {
-        List<String> instructions = new ArrayList<>();
-
-        for (LanguageParser.ExpressionContext expression : ctx.expression()) {
-            instructions.add(tree.get(expression).getCode());
-        }
-
-        instructions.add(STR . "print \{ ctx.expression().size() }");
-        tree.put(ctx, Statement.of(String.join("\n", instructions), Type.VOID));
-    }
-
-    @Override
-    public void exitVarExpression(LanguageParser.VarExpressionContext ctx) {
-        String varName = ctx.VAR().getText();
-        String code = STR . "load \{ varName }";
-
-        tree.put(ctx, Statement.of(code, symbolTable.get(varName)));
-    }
-
-    @Override
-    public void exitLiteralExpression(LanguageParser.LiteralExpressionContext ctx) {
-        Type type = getLiteralType(ctx.literal());
-
-        switch (type) {
-            case INT -> {
-                int value = Integer.parseInt(ctx.literal().INT().getText());
-                tree.put(ctx, Statement.of(STR . "push I \{ value }", Type.INT));
+                if (left instanceof Float || right instanceof Float ) {
+                    stack.push(NumberUtils.parseToFloat(left) - NumberUtils.parseToFloat(right));
+                } else {
+                    stack.push((int) left - (int) right);
+                }
             }
 
-            case FLOAT -> {
-                float value = Float.parseFloat(ctx.literal().FLOAT().getText());
-                tree.put(ctx, Statement.of(STR . "push F \{ value }", Type.FLOAT));
+            case "MUL" -> {
+                Object right = stack.pop();
+                Object left = stack.pop();
+
+                if (left instanceof Float || right instanceof Float ) {
+                    stack.push(NumberUtils.parseToFloat(left) * NumberUtils.parseToFloat(right));
+                } else {
+                    stack.push((int) left * (int) right);
+                }
             }
 
-            case BOOL -> {
-                boolean value = Boolean.parseBoolean(ctx.literal().BOOL().getText());
-                tree.put(ctx, Statement.of(STR . "push B \{ value ? "true" : "false" }", Type.BOOL));
+            case "DIV" -> {
+                Object right = stack.pop();
+                Object left = stack.pop();
+
+                if (left instanceof Float || right instanceof Float ) {
+                    stack.push(NumberUtils.parseToFloat(left) / NumberUtils.parseToFloat(right));
+                } else {
+                    stack.push((int) left / (int) right);
+                }
             }
 
-            case STRING -> {
-                String value = ctx.literal().STRING().getText();
-                tree.put(ctx, Statement.of(STR . "push S \{ value }", Type.STRING));
+            case "MOD" -> {
+                Object right = stack.pop();
+                Object left = stack.pop();
+
+                stack.push((int) left % (int) right);
             }
 
-            case ERROR -> {
-                log.error("Unknown literal type");
-            }
-        }
-    }
+            case "UMINUS" -> {
+                Object value = stack.pop();
 
-    private Type getLiteralType(LanguageParser.LiteralContext ctx) {
-        if (ctx.INT() != null) {
-            return Type.INT;
-        } else if (ctx.FLOAT() != null) {
-            return Type.FLOAT;
-        } else if (ctx.BOOL() != null) {
-            return Type.BOOL;
-        } else if (ctx.STRING() != null) {
-            return Type.STRING;
-        }
-
-        return Type.ERROR;
-    }
-
-    @Override
-    public void exitExprStatement(LanguageParser.ExprStatementContext ctx) {
-        List<String> instructions = new ArrayList<>();
-
-        Type type = tree.get(ctx.expression()).getType();
-        instructions.add(tree.get(ctx.expression()).getCode());
-        instructions.add("pop");
-
-        tree.put(ctx, Statement.of(String.join("\n", instructions), type));
-    }
-
-    @Override
-    public void exitEmptyStatement(LanguageParser.EmptyStatementContext ctx) {
-        tree.put(ctx, Statement.of("", Type.VOID));
-    }
-
-    @Override
-    public void exitConcatExpression(LanguageParser.ConcatExpressionContext ctx) {
-        List<String> instructions = new ArrayList<>();
-
-        instructions.add(tree.get(ctx.expression(0)).getCode());
-        instructions.add(tree.get(ctx.expression(1)).getCode());
-        instructions.add("concat");
-
-        tree.put(ctx, Statement.of(String.join("\n", instructions), Type.STRING));
-    }
-
-    @Override
-    public void exitNotExpression(LanguageParser.NotExpressionContext ctx) {
-        List<String> instructions = new ArrayList<>();
-
-        instructions.add(tree.get(ctx.expression()).getCode());
-        instructions.add("not");
-
-        tree.put(ctx, Statement.of(String.join("\n", instructions), Type.BOOL));
-    }
-
-    @Override
-    public void exitReadStatement(LanguageParser.ReadStatementContext ctx) {
-        List<String> instructions = new ArrayList<>();
-
-        for (TerminalNode var : ctx.VAR()) {
-            String varName = var.getText();
-            Type varType = symbolTable.getOrDefault(varName, Type.ERROR);
-
-            instructions.add(STR . "read \{ varType.toString().charAt(0) }");
-            instructions.add(STR . "save \{ varName }");
-        }
-
-        tree.put(ctx, Statement.of(String.join("\n", instructions), Type.VOID));
-    }
-
-    @Override
-    public void exitNegExpression(LanguageParser.NegExpressionContext ctx) {
-        List<String> instructions = new ArrayList<>();
-
-        Type type = tree.get(ctx.expression()).getType();
-        Type result = Type.resultType(type, Type.INT, "-");
-
-        instructions.add(tree.get(ctx.expression()).getCode());
-        instructions.add("uminus");
-
-        tree.put(ctx, Statement.of(String.join("\n", instructions), result));
-    }
-
-    @Override
-    public void exitComparisonExpression(LanguageParser.ComparisonExpressionContext ctx) {
-        List<String> instructions = new ArrayList<>();
-
-        Statement left = tree.get(ctx.expression(0));
-        Statement right = tree.get(ctx.expression(1));
-
-        instructions.add(left.getCode());
-        if (left.getType() == Type.INT && right.getType() == Type.FLOAT) {
-            instructions.add("itof");
-        }
-
-        instructions.add(right.getCode());
-        if (right.getType() == Type.INT && left.getType() == Type.FLOAT) {
-            instructions.add("itof");
-        }
-
-        switch (ctx.op.getText()) {
-            case "==" -> {
-                instructions.add("eq");
+                if (value instanceof Float) {
+                    stack.push(-NumberUtils.parseToFloat(value));
+                } else {
+                    stack.push(-(int) value);
+                }
             }
 
-            case "!=" -> {
-                instructions.add("eq");
-                instructions.add("not");
+            case "CONCAT" -> {
+                Object right = stack.pop();
+                Object left = stack.pop();
+
+                stack.push(left.toString() + right.toString());
+            }
+
+            case "AND" -> {
+                Object right = stack.pop();
+                Object left = stack.pop();
+
+                stack.push((boolean) left && (boolean) right);
+            }
+
+            case "OR" -> {
+                Object right = stack.pop();
+                Object left = stack.pop();
+
+                stack.push((boolean) left || (boolean) right);
+            }
+
+            case "GT" -> {
+                Object right = stack.pop();
+                Object left = stack.pop();
+
+                if (left instanceof Float || right instanceof Float) {
+                    stack.push(NumberUtils.parseToFloat(left) > NumberUtils.parseToFloat(right));
+                } else {
+                    stack.push((int) left > (int) right);
+                }
+            }
+
+            case "LT" -> {
+                Object right = stack.pop();
+                Object left = stack.pop();
+
+                if (left instanceof Float || right instanceof Float) {
+                    stack.push(NumberUtils.parseToFloat(left) < NumberUtils.parseToFloat(right));
+                } else {
+                    stack.push((int) left < (int) right);
+                }
+            }
+
+            case "EQ" -> {
+                Object right = stack.pop();
+                Object left = stack.pop();
+
+                if (left instanceof Float || right instanceof Float) {
+                    stack.push(NumberUtils.parseToFloat(left) == NumberUtils.parseToFloat(right));
+                } else if (left instanceof String || right instanceof String) {
+                    stack.push(left.toString().equals(right.toString()));
+                } else if (left instanceof Boolean || right instanceof Boolean) {
+                    stack.push((boolean) left == (boolean) right);
+                } else {
+                    stack.push((int) left == (int) right);
+                }
+            }
+
+            case "NOT" -> {
+                Object value = stack.pop();
+
+                stack.push(!(boolean) value);
+            }
+
+            case "ITOF" -> {
+                Object value = stack.pop();
+
+                stack.push(NumberUtils.parseToFloat(value));
+            }
+
+            case "PUSH" -> {
+                switch (parts[1].toUpperCase()) {
+                    case "I" -> stack.push(Integer.parseInt(parts[2]));
+                    case "F" -> stack.push(Float.parseFloat(parts[2]));
+                    case "B" -> stack.push(Boolean.parseBoolean(parts[2]));
+                    case "S" -> {
+                        String line = instruction.substring(7);
+                        stack.push(line.substring(1, line.length() - 1));
+                    }
+                }
+            }
+
+            case "POP" -> stack.pop();
+
+            case "LOAD" -> stack.push(variables.get(parts[1]));
+
+            case "SAVE" -> variables.put(parts[1], stack.pop());
+
+            case "LABEL" -> {
+                // Already being handled by pre-mapping
+                // labels.put(parts[1], lineNum);
+            }
+
+            case "JMP" -> {
+                currentIndex = labels.get(parts[1]);
+            }
+
+            case "FJMP" -> {
+                if (!(boolean) stack.pop()) {
+                    currentIndex = labels.get(parts[1]);
+                }
+            }
+
+            case "PRINT" -> {
+                int count = Integer.parseInt(parts[1]);
+
+                List<String> lines = new ArrayList<>();
+                for (int i = 0; i < count; i++) {
+                    String line = stack.pop().toString();
+                    if (line.isBlank()) continue;
+
+                    lines.add(line);
+                }
+
+                Collections.reverse(lines);
+
+                StringBuilder builder = new StringBuilder();
+                lines.forEach(builder::append);
+
+                lines.clear();
+                lines = List.of(builder.toString().split("\n"));
+
+                processedLines.addAll(lines);
+            }
+
+            case "READ" -> {
+                String type = parts[1].toUpperCase();
+                String line = scanner.nextLine();
+
+                switch (type) {
+                    case "I" -> stack.push(Integer.parseInt(line));
+                    case "F" -> stack.push(Float.parseFloat(line));
+                    case "B" -> stack.push(Boolean.parseBoolean(line));
+                    case "S" -> stack.push(line);
+                }
             }
         }
-
-        tree.put(ctx, Statement.of(String.join("\n", instructions), Type.BOOL));
-    }
-
-    @Override
-    public void exitRelationExpression(LanguageParser.RelationExpressionContext ctx) {
-        List<String> instructions = new ArrayList<>();
-
-        Statement left = tree.get(ctx.expression(0));
-        Statement right = tree.get(ctx.expression(1));
-
-        instructions.add(left.getCode());
-        if (left.getType() == Type.INT && right.getType() == Type.FLOAT) {
-            instructions.add("itof");
-        }
-
-        instructions.add(right.getCode());
-        if (right.getType() == Type.INT && left.getType() == Type.FLOAT) {
-            instructions.add("itof");
-        }
-
-        instructions.add(switch (ctx.op.getText()) {
-            case "<" -> "lt";
-            case ">" -> "gt";
-            case "==" -> "eq";
-            case "!=" -> "ne";
-            default -> "Unknown operator";
-        });
-
-        tree.put(ctx, Statement.of(String.join("\n", instructions), Type.BOOL));
-    }
-
-    @Override
-    public void exitAssignExpression(LanguageParser.AssignExpressionContext ctx) {
-        List<String> instructions = new ArrayList<>();
-
-        Statement var = tree.get(ctx.expression());
-        String varName = ctx.VAR().getText();
-        Type varType = symbolTable.getOrDefault(varName, Type.ERROR);
-        Type exprType = var.getType();
-
-        instructions.add(var.getCode());
-        if (varType == Type.FLOAT && exprType == Type.INT) {
-            instructions.add("itof");
-        }
-
-        instructions.add(STR . "save \{ varName }");
-        instructions.add(STR . "load \{ varName }");
-
-        tree.put(ctx, Statement.of(String.join("\n", instructions), varType));
     }
 }

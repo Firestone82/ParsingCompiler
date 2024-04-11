@@ -1,30 +1,40 @@
 package cz.mik0486.pjp.project.expression;
 
 import cz.mik0486.pjp.project.TestClass;
+import cz.mik0486.pjp.project.antlr.StringUtils;
 import org.junit.jupiter.api.Test;
+
+import java.util.Scanner;
 
 public class ComparisonTests extends TestClass {
 
     @Test
     public void testEqual() {
-        String input = """
-            2 == 2;
+        String code = """
+            write 2 == 2;
         """;
 
         String compiled = """
             push I 2
             push I 2
             eq
-            pop
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            true
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testNotEqual() {
-        String input = """
-            2 != 2;
+        String code = """
+            write 2 != 2;
         """;
 
         String compiled = """
@@ -32,18 +42,25 @@ public class ComparisonTests extends TestClass {
             push I 2
             eq
             not
-            pop
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            false
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testInt() {
-        String input = """
+        String code = """
             int a;
             int b;
-            a == b;
+            write a == b;
         """;
 
         String compiled = """
@@ -54,18 +71,25 @@ public class ComparisonTests extends TestClass {
             load a
             load b
             eq
-            pop
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            true
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testFloat() {
-        String input = """
+        String code = """
             float a;
             float b;
-            a == b;
+            write a == b;
         """;
 
         String compiled = """
@@ -76,18 +100,25 @@ public class ComparisonTests extends TestClass {
             load a
             load b
             eq
-            pop
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            true
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testString() {
-        String input = """
+        String code = """
             string a;
             string b;
-            a == b;
+            write a == b;
         """;
 
         String compiled = """
@@ -98,20 +129,27 @@ public class ComparisonTests extends TestClass {
             load a
             load b
             eq
-            pop
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            true
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testBool() {
-        String input = """
+        String code = """
             bool a;
             bool b;
             a == b;
         """;
 
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(code, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }

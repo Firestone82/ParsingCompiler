@@ -1,13 +1,16 @@
 package cz.mik0486.pjp.project.statement;
 
 import cz.mik0486.pjp.project.TestClass;
+import cz.mik0486.pjp.project.antlr.StringUtils;
 import org.junit.jupiter.api.Test;
+
+import java.util.Scanner;
 
 public class TernaryTests extends TestClass {
 
     @Test
     public void testTernary() {
-        String input = """
+        String code = """
             int a;
             int b;
             int c;
@@ -20,12 +23,18 @@ public class TernaryTests extends TestClass {
             TODO
         """;
 
-        processSuccess(input, null, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+        """;
+
+        processSuccess(code, null, new Scanner(StringUtils.stripSpaces(input)), null, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testTernaryWithoutParentheses() {
-        String input = """
+        String code = """
             int a;
             int b;
             int c;
@@ -38,12 +47,18 @@ public class TernaryTests extends TestClass {
             TODO
         """;
 
-        processSuccess(input, null, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+        """;
+
+        processSuccess(code, null, new Scanner(StringUtils.stripSpaces(input)), null, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testTernaryIntFloat() {
-        String input = """
+        String code = """
             int a;
             float b;
             float c;
@@ -56,12 +71,18 @@ public class TernaryTests extends TestClass {
             TODO
         """;
 
-        processSuccess(input, null, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+        """;
+
+        processSuccess(code, null, new Scanner(StringUtils.stripSpaces(input)), null, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testTernaryWrongCondition() {
-        String input = """
+        String code = """
             string a;
             float b;
             int c;
@@ -70,12 +91,12 @@ public class TernaryTests extends TestClass {
             c = (a ? a : b);
         """;
 
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(code, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testTernaryWrongAssignment() {
-        String input = """
+        String code = """
             int a;
             int b;
             string c;
@@ -84,12 +105,12 @@ public class TernaryTests extends TestClass {
             c = (a > b ? a : b);
         """;
 
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(code, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testTernaryWrongType() {
-        String input = """
+        String code = """
             int a;
             string b;
             int c;
@@ -98,6 +119,6 @@ public class TernaryTests extends TestClass {
             c = (true ? a : b);
         """;
 
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(code, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }

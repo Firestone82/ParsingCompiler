@@ -1,13 +1,16 @@
 package cz.mik0486.pjp.project.statement;
 
 import cz.mik0486.pjp.project.TestClass;
+import cz.mik0486.pjp.project.antlr.StringUtils;
 import org.junit.jupiter.api.Test;
+
+import java.util.Scanner;
 
 public class WriteTests extends TestClass {
 
     @Test
     public void testWriteInt() {
-        String input = """
+        String code = """
             int a;
             write a;
         """;
@@ -19,12 +22,19 @@ public class WriteTests extends TestClass {
             print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            0
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testWriteFloat() {
-        String input = """
+        String code = """
             float a;
             write a;
         """;
@@ -36,12 +46,19 @@ public class WriteTests extends TestClass {
             print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            0.0
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testWriteString() {
-        String input = """
+        String code = """
             string a;
             write a;
         """;
@@ -53,12 +70,18 @@ public class WriteTests extends TestClass {
             print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testWriteBool() {
-        String input = """
+        String code = """
             bool a;
             write a;
         """;
@@ -70,17 +93,24 @@ public class WriteTests extends TestClass {
             print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            false
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testWriteMultipleVariables() {
-        String input = """
+        String code = """
             int a;
             float b;
             string c;
             bool d;
-            write a, b, c, d;
+            write a, ",", b, ",", c, ",", d;
         """;
 
         String compiled = """
@@ -93,36 +123,46 @@ public class WriteTests extends TestClass {
             push B false
             save d
             load a
+            push S ","
             load b
+            push S ","
             load c
+            push S ","
             load d
-            print 4
+            print 7
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            0,0.0,,false
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testWriteNoDeclaration() {
-        String input = """
+        String code = """
             write a;
         """;
 
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(code, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testWriteNonsense() {
-        String input = """
+        String code = """
             write "ahoj" > 5;
         """;
 
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(code, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
     public void testWriteWord() {
-        String input = """
+        String code = """
             write "ahoj";
         """;
 
@@ -131,6 +171,13 @@ public class WriteTests extends TestClass {
             print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+            ahoj
+        """;
+
+        processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }

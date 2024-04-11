@@ -6,73 +6,164 @@ import org.junit.jupiter.api.Test;
 public class WhileTests extends TestClass {
 
     @Test
-    public void testWriteInt() {
-        String input = """
-            int a;
-            write a;
+    public void testWhile() {
+        String code = """
+            int i;
+            while (i < 10) {
+                int a;
+            }
         """;
 
         String compiled = """
-            TODO
+            push I 0
+            save i
+            label L0
+            load i
+            push I 10
+            lt
+            fjmp L1
+            push I 0
+            save a
+            jmp L0
+            label L1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """        
+        """;
+
+        String output = """
+        """;
+
+        processSuccess(code, compiled, null, null, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
-    public void testUnaryMinusNoDeclaration() {
-        String input = """
-            -a;
-        """;
-
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
-    }
-
-    @Test
-    public void testUnaryMinusInt() {
-        String input = """
-            int a;
-            -a;
+    public void testWhileComplex() {
+        String code = """
+            int i, b;
+            read b;
+            
+            while (i < b) {
+                int a;
+                a = 1;
+                i = i + a;
+            }
+            
+            write i;
         """;
 
         String compiled = """
-            TODO
+            push I 0
+            save i
+            push I 0
+            save b
+            read I
+            save b
+            label L0
+            load i
+            load b
+            lt
+            fjmp L1
+            push I 0
+            save a
+            push I 1
+            save a
+            load a
+            pop
+            load i
+            load a
+            add
+            save i
+            load i
+            pop
+            jmp L0
+            label L1
+            load i
+            print 1
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """    
+            10
+        """;
+
+        String output = """
+            10
+        """;
+
+        processSuccess(code, compiled, null, null, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
-    public void testUnaryMinusFloat() {
-        String input = """
-            float a;
-            -a;
+    public void testWhileWithIf() {
+        String code = """
+            int i, b;
+            read b;
+            
+            while (i < b) {
+                int a;
+                a = 1;
+                i = i + a;
+                
+                if (i == 5) {
+                    write "i is 5";
+                }
+            }
         """;
 
         String compiled = """
-            TODO
+            push I 0
+            save i
+            push I 0
+            save b
+            read I
+            save b
+            label L2
+            load i
+            load b
+            lt
+            fjmp L3
+            push I 0
+            save a
+            push I 1
+            save a
+            load a
+            pop
+            load i
+            load a
+            add
+            save i
+            load i
+            pop
+            load i
+            push I 5
+            eq
+            fjmp L1
+            push S "i is 5"
+            print 1
+            label L1
+            jmp L2
+            label L3
         """;
 
-        processSuccess(input, compiled, Thread.currentThread().getStackTrace()[1].getMethodName());
+        String input = """    
+            10
+        """;
+
+        String output = """
+            i is 5
+        """;
+
+        processSuccess(code, compiled, null, null, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Test
-    public void testUnaryMinusString() {
-        String input = """
-            string a;
-            -a;
+    public void testIfNotDeclared() {
+        String code = """
+            while (i < 10) {
+                int a;
+            }
         """;
 
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
-    }
-
-    @Test
-    public void testUnaryMinusBool() {
-        String input = """
-            bool a;
-            -a;
-        """;
-
-        processFail(input, Thread.currentThread().getStackTrace()[1].getMethodName());
+        processFail(code, Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }
