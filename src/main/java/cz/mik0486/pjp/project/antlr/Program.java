@@ -118,7 +118,7 @@ public class Program {
         }
 
         long endTime = System.currentTimeMillis();
-        log.info("Program initialized in %d ms".formatted(endTime - startTime));
+        log.info("Syntax check passed in %d ms".formatted(endTime - startTime));
         return true;
     }
 
