@@ -77,10 +77,24 @@ public class Program {
 
             StringBuilder sb = new StringBuilder();
             int lineNum = 1;
+            int indent = 0;
 
             for (String line : inputText.split("\n")) {
                 line = line.strip();
                 sb.append(line).append("\n");
+
+                boolean isBlock = line.endsWith("{") || line.startsWith("}");
+                if (line.endsWith("{")) {
+                    indent++;
+                }
+
+                if (line.startsWith("}")) {
+                    indent--;
+                }
+
+                if (!isBlock) {
+                    line = " ".repeat(indent * 4) + line;
+                }
 
                 log.trace(" | %d | %s".formatted(lineNum++, line));
             }
