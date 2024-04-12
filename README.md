@@ -2,6 +2,12 @@
 - Author: Pavel Mikula (MIK0486)
 - Took approximately 25 hours
 
+<p>
+    <img alt="Testing" src="https://github.com/Firestone82/ParsingCompiler/actions/workflows/java.yml">
+    <img alt="License" src="https://img.shields.io/github/license/Firestone82/ParsingCompiler">
+    <img alt="GitHub issues" src="https://img.shields.io/github/issues/Firestone82/ParsingCompiler">
+</p>
+
 ## Requirements:
 - Java 21
 - Maven 3.8.1
@@ -44,17 +50,17 @@ Lists in expressions trees are literals or variables. Types of operands must pre
 
 Following table defines operators in our expressions. Operator Signature is defined using letters: 'I, R, B, S' which corresponds to types: `int`, `float`, `bool`, `string`.
 
-| Description                   | Operator            | Operator's Signature                                       |
-|-------------------------------|---------------------|------------------------------------------------------------|
-| unary minus                   | `-`                 | `I → I ∨ F → F`                                             |
-| binary arithmetic operators   | `+, -, *, /`        | `I × I → I ∨ F × F → F`                                     |
-| modulo                        | `%`                 | `I × I → I`                                                 |
-| concatenation of strings      | `.`                 | `S × S → S`                                                 |
-| relational operators          | `< >`               | `x × x → B, where x ∈ {I, F}`                               |
-| comparison                    | `== !=`             | `x × x → B, where x ∈ {I, F, S}`                            |
-| logic and, or                 | `&&, ||`            | `B × B → B`                                                 |
-| logic not                     | `!`                 | `B → B`                                                     |
-| assignment                    | `=`                 | `x × x → x, where x ∈ {I, F, S, B}`                         |
+| Description                 | Operator     | Operator's Signature                |
+|-----------------------------|--------------|-------------------------------------|
+| unary minus                 | `-`          | `I → I ∨ F → F`                     |
+| binary arithmetic operators | `+, -, *, /` | `I × I → I ∨ F × F → F`             |
+| modulo                      | `%`          | `I × I → I`                         |
+| concatenation of strings    | `.`          | `S × S → S`                         |
+| relational operators        | `< >`        | `x × x → B, where x ∈ {I, F}`       |
+| comparison                  | `== !=`      | `x × x → B, where x ∈ {I, F, S}`    |
+| logic and, or               | `&& \|\|`    | `B × B → B`                         |
+| logic not                   | `!`          | `B → B`                             |
+| assignment                  | `=`          | `x × x → x, where x ∈ {I, F, S, B}` |
 
 In the assignment, the left operand is strictly a variable and the right operand is an expression. The type of the variable is the type of the left operand. A side effect is storing the value on the right side into the variable. The automatic conversion cannot change the type of the variable, i.e., it is impossible to store `float` value in `int` variable.
 
@@ -83,31 +89,31 @@ Sample input containing errors:
 ## Our (Stack-based) Instructions Set
 All instructions are stack based. The main memory is a stack and while evaluating the instructions, the input data are taken from stack and the results are put also in stack.
 
-| Instruction | Description                                                                                             |
-|-------------|---------------------------------------------------------------------------------------------------------|
-| `add`       | binary `+`                                                                                              |
-| `sub`       | binary `-`                                                                                              |
-| `mul`       | binary `*`                                                                                              |
-| `div`       | binary `/`                                                                                              |
-| `mod`       | binary `%`                                                                                              |
-| `uminus`    | unary `-`                                                                                               |
-| `concat`    | binary `.` - concatenation of strings                                                                   |
-| `and`       | binary `&&`                                                                                             |
-| `or`        | binary `||`                                                                                             |
-| `gt`        | binary `>`                                                                                              |
-| `lt`        | binary `<`                                                                                              |
-| `eq`        | binary `==` - compares two values                                                                       |
-| `not`       | unary `!` - negating boolean value                                                                       |
-| `itof`      | Instruction takes int value from the stack, converts it to float and returns it to stack.               |
+| Instruction | Description                                                                                                                                                           |
+|-------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `add`       | binary `+`                                                                                                                                                            |
+| `sub`       | binary `-`                                                                                                                                                            |
+| `mul`       | binary `*`                                                                                                                                                            |
+| `div`       | binary `/`                                                                                                                                                            |
+| `mod`       | binary `%`                                                                                                                                                            |
+| `uminus`    | unary `-`                                                                                                                                                             |
+| `concat`    | binary `.` - concatenation of strings                                                                                                                                 |
+| `and`       | binary `&&`                                                                                                                                                           |
+| `or`        | binary `\|\|`                                                                                                                                                         |
+| `gt`        | binary `>`                                                                                                                                                            |
+| `lt`        | binary `<`                                                                                                                                                            |
+| `eq`        | binary `==` - compares two values                                                                                                                                     |
+| `not`       | unary `!` - negating boolean value                                                                                                                                    |
+| `itof`      | Instruction takes int value from the stack, converts it to float and returns it to stack.                                                                             |
 | `push T x`  | Instruction pushes the value `x` of type `T`. Where `T` represents `I - int`, `F - float`, `S - string`, `B - bool`. Example: push I 10, push B true, push S "A B C " |
-| `pop`       | Instruction takes one value from the stack and discards it.                                             |
-| `load id`   | Instruction loads value of variable `id` on stack.                                                      |
-| `save id`   | Instruction takes value from the top of the stack and stores it into the variable with name `id`        |
-| `label n`   | Instruction marks the spot in source code with unique number `n`                                        |
-| `jmp n`     | Instruction jumps to the label defined by unique number `n`                                             |
-| `fjmp n`    | Instruction takes boolean value from the stack and if it is `false`, it will perform a jump to a label with unique number `n` |
-| `print n`   | Instruction takes `n` values from stack and prints them on standard output                              |
-| `read T`    | Instruction reads value of type `T` (`I - int`, `F - float`, `S - string`, `B - bool`) from standard input and stores it on the stack |
+| `pop`       | Instruction takes one value from the stack and discards it.                                                                                                           |
+| `load id`   | Instruction loads value of variable `id` on stack.                                                                                                                    |
+| `save id`   | Instruction takes value from the top of the stack and stores it into the variable with name `id`                                                                      |
+| `label n`   | Instruction marks the spot in source code with unique number `n`                                                                                                      |
+| `jmp n`     | Instruction jumps to the label defined by unique number `n`                                                                                                           |
+| `fjmp n`    | Instruction takes boolean value from the stack and if it is `false`, it will perform a jump to a label with unique number `n`                                         |
+| `print n`   | Instruction takes `n` values from stack and prints them on standard output                                                                                            |
+| `read T`    | Instruction reads value of type `T` (`I - int`, `F - float`, `S - string`, `B - bool`) from standard input and stores it on the stack                                 |
 
 ## Showcasing the Project
 <p align="center">

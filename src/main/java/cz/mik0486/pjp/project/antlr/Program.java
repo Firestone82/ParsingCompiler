@@ -85,17 +85,19 @@ public class Program {
             for (String line : inputText.split("\n")) {
                 line = line.strip();
                 sb.append(line).append("\n");
+                boolean changed = false;
 
-                boolean isBlock = line.endsWith("{") || line.startsWith("}");
                 if (line.endsWith("{")) {
+                    line = " ".repeat(indent * 4) + line;
                     indent++;
+                    changed = true;
                 }
 
                 if (line.startsWith("}")) {
                     indent--;
                 }
 
-                if (!isBlock) {
+                if (!changed) {
                     line = " ".repeat(indent * 4) + line;
                 }
 
