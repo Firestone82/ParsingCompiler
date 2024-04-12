@@ -1,4 +1,4 @@
-package cz.mik0486.pjp.project.antlr;
+package cz.mik0486.pjp.project.antlr.language;
 
 import cz.mik0486.pjp.project.antlr.error.ErrorLogger;
 import cz.mik0486.pjp.project.antlr.gen.LanguageBaseVisitor;

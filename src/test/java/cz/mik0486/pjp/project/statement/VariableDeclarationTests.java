@@ -1,7 +1,7 @@
 package cz.mik0486.pjp.project.statement;
 
 import cz.mik0486.pjp.project.TestClass;
-import cz.mik0486.pjp.project.antlr.StringUtils;
+import cz.mik0486.pjp.project.utils.StringUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.Scanner;

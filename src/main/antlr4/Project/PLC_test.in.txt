@@ -1,2 +1,4 @@
 write "<Variables>";
 string s;
+read s;
+write s;

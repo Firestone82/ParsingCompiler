@@ -1,9 +1,7 @@
 package cz.mik0486.pjp.project;
 
-import cz.mik0486.pjp.project.antlr.LanguageCompiler;
 import cz.mik0486.pjp.project.antlr.Program;
 import lombok.extern.slf4j.Slf4j;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.nio.file.Path;
 import java.util.Scanner;
@@ -12,20 +10,31 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        Program programTest1 = new Program("Test 1", Path.of("Project/PLC_test.in.txt"), new Scanner(System.in));
+        String programName = "Test";
+        Path inputFile = Path.of("Project/PLC_test.in.txt");
+        Scanner inputData = new Scanner(System.in);
+
+        Program programTest1 = new Program(programName, inputFile, inputData);
         if (!programTest1.init()) {
             log.error("Error while initializing program");
             return;
         }
 
-        ParseTreeWalker walker = new ParseTreeWalker();
-        LanguageCompiler languageCompiler = new LanguageCompiler();
+        if (!programTest1.check()) {
+            log.error("Error while checking program");
+            return;
+        }
 
-        walker.walk(languageCompiler, programTest1.getContext());
-        languageCompiler.getCompiledCodeLines().forEach(log::info);
+        if (!programTest1.compile()) {
+            log.error("Error while compiling program");
+            return;
+        }
 
-//        for (ParserRuleContext expr : programTest1.getExpressions()) {
-//            log.debug("Expression: " + expr.toStringTree(programTest1.getParser()));
-//        }
+        if (!programTest1.process()) {
+            log.error("Error while processing program");
+            return;
+        }
+
+        log.info("Program successfully executed");
     }
 }

@@ -1,4 +1,4 @@
-package cz.mik0486.pjp.project.antlr;
+package cz.mik0486.pjp.project.antlr.language;
 
 public enum Type {
     INT, FLOAT, BOOL, STRING, VOID, ERROR;

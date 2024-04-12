@@ -1,7 +1,7 @@
 package cz.mik0486.pjp.project.file;
 
 import cz.mik0486.pjp.project.TestClass;
-import cz.mik0486.pjp.project.antlr.StringUtils;
+import cz.mik0486.pjp.project.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 

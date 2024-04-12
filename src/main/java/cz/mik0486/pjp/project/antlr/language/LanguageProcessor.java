@@ -1,5 +1,6 @@
-package cz.mik0486.pjp.project.antlr;
+package cz.mik0486.pjp.project.antlr.language;
 
+import cz.mik0486.pjp.project.utils.NumberUtils;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
