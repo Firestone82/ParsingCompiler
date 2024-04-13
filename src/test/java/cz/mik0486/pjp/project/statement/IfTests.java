@@ -250,24 +250,48 @@ public class IfTests extends TestClass {
     @Test
     public void testComplexIf() {
         String code = """
+            int a;
             int x;
-            x = 5;
-            if (x > 0 && x < 10) {
-                int a;
-            } else if (x > 10 && x < 20) {
-                float b;
-            } else {
-                string c;
+            read x;
+            
+            while (x < 30) {
+                if (x > 0 && x < 10) {
+                    if (a % 2 == 0) {
+                        a = a + 1;
+                    } else {
+                        a = a + 2;
+                    }
+                    
+                    x = x + 1;
+                } else if (x > 10 && x < 20) {
+                    if (a % 2 == 0) {
+                        a = a * 2;
+                    } else {
+                        a = a * 3;
+                    }
+                    
+                    x = x + 2;
+                } else {
+                    a = a + 3;
+                    x = x + 3;
+                }
             }
+            
+            write a;
         """;
 
         String compiled = """
             push I 0
+            save a
+            push I 0
             save x
-            push I 5
+            read I
             save x
+            label L8
             load x
-            pop
+            push I 30
+            lt
+            fjmp L9
             load x
             push I 0
             gt
@@ -275,11 +299,36 @@ public class IfTests extends TestClass {
             push I 10
             lt
             and
-            fjmp L2
+            fjmp L6
+            load a
+            push I 2
+            mod
             push I 0
+            eq
+            fjmp L0
+            load a
+            push I 1
+            add
             save a
-            jmp L3
-            label L2
+            load a
+            pop
+            jmp L1
+            label L0
+            load a
+            push I 2
+            add
+            save a
+            load a
+            pop
+            label L1
+            load x
+            push I 1
+            add
+            save x
+            load x
+            pop
+            jmp L7
+            label L6
             load x
             push I 10
             gt
@@ -287,21 +336,62 @@ public class IfTests extends TestClass {
             push I 20
             lt
             and
-            fjmp L0
-            push F 0.0
-            save b
-            jmp L1
-            label L0
-            push S ""
-            save c
-            label L1
+            fjmp L4
+            load a
+            push I 2
+            mod
+            push I 0
+            eq
+            fjmp L2
+            load a
+            push I 2
+            mul
+            save a
+            load a
+            pop
+            jmp L3
+            label L2
+            load a
+            push I 3
+            mul
+            save a
+            load a
+            pop
             label L3
+            load x
+            push I 2
+            add
+            save x
+            load x
+            pop
+            jmp L5
+            label L4
+            load a
+            push I 3
+            add
+            save a
+            load a
+            pop
+            load x
+            push I 3
+            add
+            save x
+            load x
+            pop
+            label L5
+            label L7
+            jmp L8
+            label L9
+            load a
+            print 1
         """;
 
-        String input = """        
+        String input = """     
+            5
         """;
 
         String output = """
+            201
         """;
 
         processSuccess(code, compiled, new Scanner(StringUtils.stripSpaces(input)), output, Thread.currentThread().getStackTrace()[1].getMethodName());
