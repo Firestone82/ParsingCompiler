@@ -87,14 +87,21 @@ public class Program {
                 sb.append(line).append("\n");
                 boolean changed = false;
 
-                if (line.endsWith("{")) {
-                    line = " ".repeat(indent * 4) + line;
-                    indent++;
-                    changed = true;
-                }
+                if (!(line.startsWith("}") && line.endsWith("{"))) {
+                    if (line.endsWith("{")) {
+                        line = " ".repeat(indent * 4) + line;
+                        indent++;
+                        changed = true;
+                    }
 
-                if (line.startsWith("}")) {
-                    indent--;
+                    if (line.startsWith("}")) {
+                        indent--;
+                    }
+                } else {
+                    if (line.startsWith("}")) {
+                        line = " ".repeat((indent-1) * 4) + line;
+                        changed = true;
+                    }
                 }
 
                 if (!changed) {
