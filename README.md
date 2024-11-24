@@ -1,14 +1,6 @@
-# Project for PJP (Custom Programming Language using ANTLR)
-
-<p>
-    <img alt="Testing" src="https://github.com/Firestone82/ParsingCompiler/actions/workflows/java.yml/badge.svg">
-    <img alt="License" src="https://img.shields.io/github/license/Firestone82/ParsingCompiler">
-    <img alt="GitHub issues" src="https://img.shields.io/github/issues/Firestone82/ParsingCompiler">
-</p>
-
+# Project for PJP: Programming Language using ANTLR
 - Author: Pavel Mikula (MIK0486)
 - Took approximately 25 hours
-
 
 ## Requirements:
 - Java 21
